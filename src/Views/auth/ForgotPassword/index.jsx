@@ -1,23 +1,23 @@
-import React, { useRef, useEffect } from 'react'
+import React from 'react'
 
 /* NPM-Packages */
 // import { Formik } from 'formik'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { useSnackbar } from 'react-notistack'
+import { useLocation } from 'react-router-dom'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { useSnackbar } from 'react-notistack'
 
 /* React-bootstrap Components */
-import { Button, Form, Spinner } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 
 /* Language Component */
 import AuthLeftLogo from '../../../Components/AuthLeftLogo'
 import BackArrow from '../../../Components/BackArrow'
 
 /* Action File */
-import { emailVerifiedAction, forgotPasswordEmailAction } from '../../../Actions/auth'
+// import { emailVerifiedAction, forgotPasswordEmailAction } from '../../../Actions/auth'
 
 // Validation-Scheme for fields
 const validationSchema = yup.object().shape({
@@ -35,27 +35,27 @@ const validationSchema = yup.object().shape({
 })
 
 function ForgotPassword () {
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  // const dispatch = useDispatch()
+  // const navigate = useNavigate()
   const location = useLocation()
-  const { enqueueSnackbar } = useSnackbar()
+  // const { enqueueSnackbar } = useSnackbar()
   // State Data
-  const isSend = useSelector(state => state.auth.isEmailVerified)
-  const isVerify = useSelector(state => state.auth.isAdminEmailVerified)
-  const isAuthMessage = useSelector(state => state.auth.resMessage)
-  const loading = useSelector(state => state.auth.loading)
-  const previousProps = useRef({ isSend, isAuthMessage, isVerify }).current
+  // const isSend = useSelector(state => state.auth.isEmailVerified)
+  // const isVerify = useSelector(state => state.auth.isAdminEmailVerified)
+  // const isAuthMessage = useSelector(state => state.auth.resMessage)
+  // const loading = useSelector(state => state.auth.loading)
+  // const previousProps = useRef({ isSend, isAuthMessage, isVerify }).current
 
   // UseForm Methods
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+  const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(validationSchema)
   })
   const { onChange, name } = register('emailMob')
 
   // Method to set url
-  useEffect(() => {
-    localStorage.setItem('url', location?.pathname)
-  }, [])
+  // useEffect(() => {
+  //   localStorage.setItem('url', location?.pathname)
+  // }, [])
 
   // Form onSubmit Method
   const onSubmit = data => {
@@ -78,69 +78,69 @@ function ForgotPassword () {
 
     if (userData) {
       // eslint-disable-next-line no-lone-blocks
-      {
-        location?.pathname === '/forgot-password'
-          ? dispatch(emailVerifiedAction(userData))
-          : location?.pathname === '/center/forgot-password'
-            ? dispatch(forgotPasswordEmailAction(userData, 'center'))
-            : dispatch(forgotPasswordEmailAction(userData, 'admin'))
-      }
+      // {
+      //   location?.pathname === '/forgot-password'
+      //     ? dispatch(emailVerifiedAction(userData))
+      //     : location?.pathname === '/center/forgot-password'
+      //       ? dispatch(forgotPasswordEmailAction(userData, 'center'))
+      //       : dispatch(forgotPasswordEmailAction(userData, 'admin'))
+      // }
     }
   }
 
   // Toastify Notification
-  useEffect(() => {
-    if (previousProps?.isSend !== isSend) {
-      if (isSend) {
-        enqueueSnackbar(`${isAuthMessage}`, {
-          variant: 'success',
-          hide: 2000,
-          autoHide: true
-        })
-        navigate('/one-time-password')
-        reset()
-      } else if (isSend === false) {
-        enqueueSnackbar(`${isAuthMessage}`, {
-          variant: 'error',
-          hide: 2000,
-          autoHide: true,
-          TransitionComponent: 'Fade'
-        }
-        )
-      }
-    }
-    return () => {
-      previousProps.isSend = isSend
-    }
-  }, [isSend])
+  // useEffect(() => {
+  //   if (previousProps?.isSend !== isSend) {
+  //     if (isSend) {
+  //       enqueueSnackbar(`${isAuthMessage}`, {
+  //         variant: 'success',
+  //         hide: 2000,
+  //         autoHide: true
+  //       })
+  //       navigate('/one-time-password')
+  //       reset()
+  //     } else if (isSend === false) {
+  //       enqueueSnackbar(`${isAuthMessage}`, {
+  //         variant: 'error',
+  //         hide: 2000,
+  //         autoHide: true,
+  //         TransitionComponent: 'Fade'
+  //       }
+  //       )
+  //     }
+  //   }
+  //   return () => {
+  //     previousProps.isSend = isSend
+  //   }
+  // }, [isSend])
 
-  useEffect(() => {
-    if (previousProps?.isVerify !== isVerify) {
-      if (isVerify) {
-        enqueueSnackbar(`${isAuthMessage}`, {
-          variant: 'success',
-          hide: 2000,
-          autoHide: true
-        })
-        if (location?.pathname === '/center/forgot-password') {
-          navigate('/center/one-time-password')
-        } else {
-          navigate('/admin/one-time-password')
-        }
-      } else if (isVerify === false) {
-        enqueueSnackbar(`${isAuthMessage}`, {
-          variant: 'error',
-          hide: 2000,
-          autoHide: true,
-          TransitionComponent: 'Fade'
-        }
-        )
-      }
-    }
-    return () => {
-      previousProps.isVerify = isVerify
-    }
-  }, [isVerify])
+  // useEffect(() => {
+  //   if (previousProps?.isVerify !== isVerify) {
+  //     if (isVerify) {
+  //       enqueueSnackbar(`${isAuthMessage}`, {
+  //         variant: 'success',
+  //         hide: 2000,
+  //         autoHide: true
+  //       })
+  //       if (location?.pathname === '/center/forgot-password') {
+  //         navigate('/center/one-time-password')
+  //       } else {
+  //         navigate('/admin/one-time-password')
+  //       }
+  //     } else if (isVerify === false) {
+  //       enqueueSnackbar(`${isAuthMessage}`, {
+  //         variant: 'error',
+  //         hide: 2000,
+  //         autoHide: true,
+  //         TransitionComponent: 'Fade'
+  //       }
+  //       )
+  //     }
+  //   }
+  //   return () => {
+  //     previousProps.isVerify = isVerify
+  //   }
+  // }, [isVerify])
 
   // Custom HandleChange Function to handle initial values and set fields values
   const onHandleChange = (e, type) => {
@@ -184,9 +184,9 @@ function ForgotPassword () {
                           } */}
                           {errors.emailMob?.message && <Form.Text className="error-msg">{errors.emailMob?.message} </Form.Text>}
                         </Form.Group>
-                        <Button variant="primary" type="submit" className='theme-btn large-btn'>
+                        {/* <Button variant="primary" type="submit" className='theme-btn large-btn'>
                           Send {loading && <Spinner className="text-center" animation="border" size='sm' />}
-                        </Button>
+                        </Button> */}
                       </Form>
                     </div>
                   </div>

@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 /* import LogoBg from '../../../assets/images/icon-bglogo.png' */
-import { ProgressBar } from 'react-bootstrap'
+// import { ProgressBar } from 'react-bootstrap'
 import { useLocation, Link } from 'react-router-dom'
 import AuthLeftLogo from '../../../Components/AuthLeftLogo'
 // import CounsellorEducationDetails from '../../../Components/Signup/CounsellorEducationDetails'
@@ -8,7 +8,7 @@ import AuthLeftLogo from '../../../Components/AuthLeftLogo'
 import BackArrow from '../../../Components/BackArrow'
 import CounsellorDetails from '../../../Components/Signup/CounsellorDetails'
 function SignUp () {
-  const [now, setNow] = useState(0)
+  // const [now, setNow] = useState(0)
   const location = useLocation()
   // const [url, setUrl] = useState(['/'])
   // useEffect(() => {
@@ -23,13 +23,13 @@ function SignUp () {
       <div className="common-layout">
        <AuthLeftLogo />
         <div className="form-box-section">
-        <ProgressBar now={now} />
+        {/* <ProgressBar now={now} /> */}
          <div className="middle-form signup-page">
          <BackArrow location={location} />
           <div className="title-box">
               <h2>Sign Up</h2>
             </div>
-              <CounsellorDetails setNow={ setNow } />
+              <CounsellorDetails setNow={ 0 } />
               {/* <CounsellorEducationDetails /> */}
          {/* <CounsellorKYCDetails /> */}
           </div>
