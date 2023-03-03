@@ -27,7 +27,7 @@ function AdminProfile () {
             <h3 className='text-start'>My Profile</h3>
             <div className="profilebutton-box text-end">
               <Link to='/admin/settings/myprofile/change-password' className='theme-btn text-none d-inline-block'>Change Password</Link>
-              <Link to='/admin/settings/my-profile/editmyprofile' className='theme-btn text-none d-inline-block ms-2'>Edit My Profile</Link>
+              <Link to='/admin/settings/myprofile/editmyprofile' className='theme-btn text-none d-inline-block ms-2'>Edit My Profile</Link>
             </div>
             <div className="my-profile-box">
               <div className="row ">
