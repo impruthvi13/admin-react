@@ -1,31 +1,31 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import TitleHeader from '../../../Components/TitleHeader'
 import * as yup from 'yup'
 import { useNavigate } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
-import { useSnackbar } from 'react-notistack'
-import { useDispatch, useSelector } from 'react-redux'
-import { editProfileAdmin, viewProfileAdmin } from '../../../Actions/auth'
+// import { useSnackbar } from 'react-notistack'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { editProfileAdmin, viewProfileAdmin } from '../../../Actions/auth'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import crossWhite from '../../../assets/images/crosswhite.svg'
-import defaultimage from '../../../assets/images/default.jpeg'
+// import defaultimage from '../../../assets/images/default.jpeg'
 function EditmyprofileAdmin () {
-  const token = localStorage.getItem('token')
+  // const token = localStorage.getItem('token')
   const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const { enqueueSnackbar } = useSnackbar()
+  // const dispatch = useDispatch()
+  // const { enqueueSnackbar } = useSnackbar()
   const [selectedImage, setSelectedFile] = useState()
-  const profileData = useSelector((state) => state.auth.profileDataAdmin)
-  const isProfileEditedAdmin = useSelector(
-    (state) => state.auth.isProfileEditedAdmin
-  )
-  const resMessageFlag = useSelector((state) => state.auth.resMessage)
-  const previousProps = useRef({ isProfileEditedAdmin }).current
+  // const profileData = useSelector((state) => state.auth.profileDataAdmin)
+  // const isProfileEditedAdmin = useSelector(
+  //   (state) => state.auth.isProfileEditedAdmin
+  // )
+  // const resMessageFlag = useSelector((state) => state.auth.resMessage)
+  // const previousProps = useRef({ isProfileEditedAdmin }).current
 
-  useEffect(() => {
-    dispatch(viewProfileAdmin(token))
-  }, [])
+  // useEffect(() => {
+  //   dispatch(viewProfileAdmin(token))
+  // }, [])
 
   // useEffect(() => {
   //   localStorage.setItem('profile', JSON.stringify(profileData))
@@ -57,49 +57,49 @@ function EditmyprofileAdmin () {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    reset
+    formState: { errors }
+    // reset
   } = useForm({
     resolver: yupResolver(validationSchema)
   })
   const { onChange } = register()
 
-  useEffect(() => {
-    if (previousProps?.isProfileEditedAdmin !== isProfileEditedAdmin) {
-      if (isProfileEditedAdmin === true) {
-        dispatch(viewProfileAdmin(token))
-        // localStorage.setItem('profile', profileData)
-        enqueueSnackbar(`${resMessageFlag}`, {
-          variant: 'success',
-          autoHide: true,
-          hide: 2000
-        })
-        navigate('/admin/settings/myprofile')
-      } else if (isProfileEditedAdmin === false) {
-        enqueueSnackbar(`${resMessageFlag}`, {
-          variant: 'error',
-          autoHide: true,
-          hide: 2000
-        })
-      }
-    }
-    return () => {
-      previousProps.isProfileEditedAdmin = isProfileEditedAdmin
-    }
-  }, [isProfileEditedAdmin])
+  // useEffect(() => {
+  //   if (previousProps?.isProfileEditedAdmin !== isProfileEditedAdmin) {
+  //     if (isProfileEditedAdmin === true) {
+  //       dispatch(viewProfileAdmin(token))
+  //       // localStorage.setItem('profile', profileData)
+  //       enqueueSnackbar(`${resMessageFlag}`, {
+  //         variant: 'success',
+  //         autoHide: true,
+  //         hide: 2000
+  //       })
+  //       navigate('/admin/settings/myprofile')
+  //     } else if (isProfileEditedAdmin === false) {
+  //       enqueueSnackbar(`${resMessageFlag}`, {
+  //         variant: 'error',
+  //         autoHide: true,
+  //         hide: 2000
+  //       })
+  //     }
+  //   }
+  //   return () => {
+  //     previousProps.isProfileEditedAdmin = isProfileEditedAdmin
+  //   }
+  // }, [isProfileEditedAdmin])
 
-  useEffect(() => {
-    if (profileData) {
-      setSelectedFile(profileData?.profile_pic)
-      reset({
-        firstname: profileData?.first_name,
-        lastname: profileData?.last_name,
-        email: profileData?.email,
-        mobileNumber: profileData?.mobile,
-        username: profileData?.user_name
-      })
-    }
-  }, [profileData])
+  // useEffect(() => {
+  //   if (profileData) {
+  //     setSelectedFile(profileData?.profile_pic)
+  //     reset({
+  //       firstname: profileData?.first_name,
+  //       lastname: profileData?.last_name,
+  //       email: profileData?.email,
+  //       mobileNumber: profileData?.mobile,
+  //       username: profileData?.user_name
+  //     })
+  //   }
+  // }, [profileData])
 
   const removeImage = (e) => {
     e.preventDefault()
@@ -114,15 +114,15 @@ function EditmyprofileAdmin () {
     formData.append('mobile', data?.mobileNumber)
     if (selectedImage !== null) {
       formData.append(
-        'profile',
-        data?.files[0] ? data?.files[0] : profileData?.profile_pic
+        'profile'
+        // data?.files[0] ? data?.files[0] : profileData?.profile_pic
       )
     }
 
     // }
-    if (formData) {
-      dispatch(editProfileAdmin(formData, token))
-    }
+    // if (formData) {
+    //   dispatch(editProfileAdmin(formData, token))
+    // }
   }
 
   return (
@@ -167,15 +167,15 @@ function EditmyprofileAdmin () {
                         {/* {selectedImage
                             ? ( */}
                         <img
-                          src={
-                            selectedImage === null
-                              ? defaultimage
-                              : typeof selectedImage === 'string'
-                                ? `${process.env.REACT_APP_AXIOS_BASE_URL}${profileData?.profile_pic}`
-                                : typeof selectedImage === 'object'
-                                  ? URL.createObjectURL(selectedImage)
-                                  : null
-                          }
+                          // src={
+                          //   selectedImage === null
+                          //     ? defaultimage
+                          //     : typeof selectedImage === 'string'
+                          //       ? `${process.env.REACT_APP_AXIOS_BASE_URL}${profileData?.profile_pic}`
+                          //       : typeof selectedImage === 'object'
+                          //         ? URL.createObjectURL(selectedImage)
+                          //         : null
+                          // }
                           alt=''
                         />
                       </div>

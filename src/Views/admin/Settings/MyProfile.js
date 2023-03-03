@@ -1,25 +1,24 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 /* Components */
 import { Link } from 'react-router-dom'
-import defaultimage from '../../../assets/images/default.jpeg'
+// import defaultimage from '../../../assets/images/default.jpeg'
 import mail from '../../../assets/images/mail.svg'
 import phone from '../../../assets/images/phone.svg'
 import studenticon from '../../../assets/images/student-icon.svg'
 import lightlogomark from '../../../assets/images/lightlogomark.svg'
-import { viewProfileAdmin } from '../../../Actions/auth'
-import { useDispatch, useSelector } from 'react-redux'
+// import { viewProfileAdmin } from '../../../Actions/auth'
+// import { useDispatch, useSelector } from 'react-redux'
 
 // import { useDispatch, useSelector } from 'react-redux'
 
 function AdminProfile () {
-  // const navigate = useNavigate()
-  const token = localStorage.getItem('token')
-  const dispatch = useDispatch()
-  const profileData = useSelector((state) => state.auth.profileDataAdmin)
+  // const token = localStorage.getItem('token')
+  // const dispatch = useDispatch()
+  // const profileData = useSelector((state) => state.auth.profileDataAdmin)
 
-  useEffect(() => {
-    dispatch(viewProfileAdmin(token))
-  }, [])
+  // useEffect(() => {
+  //   dispatch(viewProfileAdmin(token))
+  // }, [])
 
   return (
     <>
@@ -38,35 +37,23 @@ function AdminProfile () {
                       <div className="col-xl-8">
                         <div className="profileinfo profile-updated">
                           <div className="profile-img">
-                            <img src={profileData?.profile_pic ? `${process.env.REACT_APP_AXIOS_BASE_URL}${profileData?.profile_pic}` : defaultimage} alt="ollato-img" />
+                            {/* <img src={profileData?.profile_pic ? `${process.env.REACT_APP_AXIOS_BASE_URL}${profileData?.profile_pic}` : defaultimage} alt="ollato-img" /> */}
                           </div>
                           <div className="profiledesc">
-                            <h4>{profileData?.first_name} {profileData?.last_name}</h4>
+                            {/* <h4>{profileData?.first_name} {profileData?.last_name}</h4> */}
                             <ul className="iconbox">
                               <li>
                                 <img src={mail} alt="ollato-img" />
-                                <p>{profileData?.email} </p>
+                                {/* <p>{profileData?.email} </p> */}
                               </li>
                               <li>
                                 <img src={phone} alt="ollato-img" />
-                                <p>{profileData?.mobile} </p>
+                                {/* <p>{profileData?.mobile} </p> */}
                               </li>
                             </ul>
                           </div>
                         </div>
                       </div>
-                      {/* <div className="col-xl-4 bio-info">
-                        <ul>
-                          <li>
-                            <label>Father&apos;s Name</label>
-                            <h4>Himashu Roy</h4>
-                          </li>
-                          <li>
-                            <label>Mother&apos;s Name</label>
-                            <h4>Dipti Roy</h4>
-                          </li>
-                        </ul>
-                      </div> */}
                     </div>
                   </div>
                 </div>
@@ -75,7 +62,7 @@ function AdminProfile () {
                     <div className='student-code'>
                       <img src={studenticon} alt="studenticon" />
                       <p>Ollato Expert Code </p>
-                      <h4>{profileData?.ollato_code}</h4>
+                      {/* <h4>{profileData?.ollato_code}</h4> */}
                     </div>
                     <img src={lightlogomark} className='lightlogomark' alt="ollato-img" />
                   </div>
