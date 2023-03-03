@@ -3,42 +3,42 @@ import React, { useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import PropTypes from 'prop-types'
 import { Link, useLocation } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
-import { deleteUniversity } from '../../Actions/Admin/university'
+// import { usedispatch } from 'react-redux'
+// import { deleteUniversity } from '../../Actions/Admin/university'
 
 /* Action File */
-import { deleteBoard } from '../../Actions/Admin/board'
-import { deleteGrade } from '../../Actions/Admin/grade'
-import { deleteSchool } from '../../Actions/Admin/school'
-import { deleteCity } from '../../Actions/Admin/cities'
-import { deleteState } from '../../Actions/Admin/states'
-import { deletePackage } from '../../Actions/Admin/package'
-import { deleteNorms } from '../../Actions/Admin/Norms/norms'
-import {
-  deleteTestCategoryAction,
-  deleteTestSubCategoryAction
-} from '../../Actions/Admin/test'
-import { deleteTestTimeNorms } from '../../Actions/Admin/Norms/TestTimeNorms/TestTimeNorms'
-import { deleteGradeNorms } from '../../Actions/Admin/Norms/GradeNorms/GradeNorms'
-import { deleteTestNormsDescription } from '../../Actions/Admin/Norms/TestNormsDescription/TestNormsDescription'
-import { deleteQuestion } from '../../Actions/Admin/Test/Question'
-import { deleteQualification } from '../../Actions/Admin/qualification'
-import { deleteSubAdmin } from '../../Actions/Admin/subAdmin'
-import { deleteRole } from '../../Actions/Admin/role'
-import { deleteStudent } from '../../Actions/Admin/student'
-import { deleteStudentCen } from '../../Actions/Center/student'
-import { deleteCenter } from '../../Actions/Admin/center'
-import { deleteCouncellor } from '../../Actions/Admin/counsellor'
+// import { deleteBoard } from '../../Actions/Admin/board'
+// import { deleteGrade } from '../../Actions/Admin/grade'
+// import { deleteSchool } from '../../Actions/Admin/school'
+// import { deleteCity } from '../../Actions/Admin/cities'
+// import { deleteState } from '../../Actions/Admin/states'
+// import { deletePackage } from '../../Actions/Admin/package'
+// import { deleteNorms } from '../../Actions/Admin/Norms/norms'
+// import {
+//   deleteTestCategoryAction,
+//   deleteTestSubCategoryAction
+// } from '../../Actions/Admin/test'
+// import { deleteTestTimeNorms } from '../../Actions/Admin/Norms/TestTimeNorms/TestTimeNorms'
+// import { deleteGradeNorms } from '../../Actions/Admin/Norms/GradeNorms/GradeNorms'
+// import { deleteTestNormsDescription } from '../../Actions/Admin/Norms/TestNormsDescription/TestNormsDescription'
+// import { deleteQuestion } from '../../Actions/Admin/Test/Question'
+// import { deleteQualification } from '../../Actions/Admin/qualification'
+// import { deleteSubAdmin } from '../../Actions/Admin/subAdmin'
+// import { deleteRole } from '../../Actions/Admin/role'
+// import { deleteStudent } from '../../Actions/Admin/student'
+// import { deleteStudentCen } from '../../Actions/Center/student'
+// import { deleteCenter } from '../../Actions/Admin/center'
+// import { deleteCouncellor } from '../../Actions/Admin/counsellor'
 import ls from 'localstorage-slim'
 import DropDown from './DropDown'
-import { deleteSoftwareMetrics } from '../../Actions/Admin/softwareMetrix'
-import { deleteCoupon } from '../../Actions/Admin/coupenCode'
+// import { deleteSoftwareMetrics } from '../../Actions/Admin/softwareMetrix'
+// import { deleteCoupon } from '../../Actions/Admin/coupenCode'
 // import localStorage from 'react-secure-storage'
 
 function TitleHeader (props) {
-  const dispatch = useDispatch()
+  // const // dispatch = use// dispatch()
   const location = useLocation()
-  const token = localStorage.getItem('token')
+  // const token = localStorage.getItem('token')
   const roles = JSON.parse(localStorage.getItem('roles'))
   const profile = JSON.parse(localStorage.getItem('profile'))
   const adminType = ls.get('admin-type', { decrypt: true, secret: profile?.id })
@@ -60,61 +60,61 @@ function TitleHeader (props) {
 
     if (props?.rowArray) {
       if (props?.location?.pathname === '/admin/grade-management') {
-        dispatch(deleteGrade({ id: props.rowArray }, token))
+        // dispatch(deleteGrade({ id: props.rowArray }, token))
       } else if (props?.location?.pathname === '/admin/university-management') {
-        dispatch(deleteUniversity({ id: props.rowArray }, token))
+        // dispatch(deleteUniversity({ id: props.rowArray }, token))
       } else if (
         props?.location?.pathname === '/admin/qualification-management'
       ) {
-        dispatch(deleteQualification({ id: props.rowArray }, token))
+        // dispatch(deleteQualification({ id: props.rowArray }, token))
       } else if (props?.location?.pathname === '/admin/school-management') {
-        dispatch(deleteSchool({ id: props.rowArray }, token))
+        // dispatch(deleteSchool({ id: props.rowArray }, token))
       } else if (props?.location?.pathname === '/admin/software-matrix') {
-        dispatch(deleteSoftwareMetrics({ id: props.rowArray }, token))
+        // dispatch(deleteSoftwareMetrics({ id: props.rowArray }, token))
       } else if (props?.location?.pathname === '/admin/city-management') {
-        dispatch(deleteCity({ id: props.rowArray }, token))
+        // dispatch(deleteCity({ id: props.rowArray }, token))
       } else if (props?.location?.pathname === '/admin/state-management') {
-        dispatch(deleteState({ id: props.rowArray }, token))
+        // dispatch(deleteState({ id: props.rowArray }, token))
       } else if (
         props?.location?.pathname === '/admin/test-management/main-category'
       ) {
-        dispatch(deleteTestCategoryAction({ id: props.rowArray }, token))
+        // dispatch(deleteTestCategoryAction({ id: props.rowArray }, token))
       } else if (
         props?.location?.pathname === '/admin/test-management/sub-category'
       ) {
-        dispatch(deleteTestSubCategoryAction({ id: props.rowArray }, token))
+        // dispatch(deleteTestSubCategoryAction({ id: props.rowArray }, token))
       } else if (props?.location?.pathname === '/admin/package-management') {
-        dispatch(deletePackage({ id: props.rowArray }, token))
+        // dispatch(deletePackage({ id: props.rowArray }, token))
       } else if (location?.pathname === '/admin/norms-management') {
-        dispatch(deleteNorms({ id: props.rowArray }, token))
+        // dispatch(deleteNorms({ id: props.rowArray }, token))
       } else if (location?.pathname === '/admin/norms/test-time-norms') {
-        dispatch(deleteTestTimeNorms({ id: props.rowArray }, token))
+        // dispatch(deleteTestTimeNorms({ id: props.rowArray }, token))
       } else if (location?.pathname === '/admin/norms/gradenorms') {
-        dispatch(deleteGradeNorms({ id: props.rowArray }, token))
+        // dispatch(deleteGradeNorms({ id: props.rowArray }, token))
       } else if (location?.pathname === '/admin/norms/test-description-norms') {
-        dispatch(deleteTestNormsDescription({ id: props.rowArray }, token))
+        // dispatch(deleteTestNormsDescription({ id: props.rowArray }, token))
       } else if (location?.pathname === '/admin/board-management') {
-        dispatch(deleteBoard({ id: props.rowArray }, token))
+        // dispatch(deleteBoard({ id: props.rowArray }, token))
       } else if (location?.pathname === '/admin/test-management/questions') {
-        dispatch(deleteQuestion({ id: props.rowArray }, token))
+        // dispatch(deleteQuestion({ id: props.rowArray }, token))
       } else if (location?.pathname === '/admin/sub-admin-management') {
-        dispatch(deleteSubAdmin({ id: props.rowArray }, token))
+        // dispatch(deleteSubAdmin({ id: props.rowArray }, token))
       } else if (location?.pathname === '/admin/role-management') {
-        dispatch(deleteRole({ id: props.rowArray }, token))
+        // dispatch(deleteRole({ id: props.rowArray }, token))
       } else if (location?.pathname === '/admin/students-management') {
-        dispatch(deleteStudent({ id: props.rowArray }, token))
+        // dispatch(deleteStudent({ id: props.rowArray }, token))
       } else if (location?.pathname === '/center/students-management') {
-        dispatch(deleteStudentCen({ id: props.rowArray }, token))
+        // dispatch(deleteStudentCen({ id: props.rowArray }, token))
       } else if (location?.pathname === '/admin/center-management') {
-        dispatch(deleteCenter({ id: props.rowArray }, token))
+        // // dispatch(deleteCenter({ id: props.rowArray }, token))
       } else if (
         location?.pathname === `/${props?.adminType}/counsellor-management`
       ) {
-        dispatch(
-          deleteCouncellor({ id: props.rowArray }, token, props?.adminType)
-        )
+        // dispatch(
+        // deleteCouncellor({ id: props.rowArray }, token, props?.adminType)
+        // )
       } else if (location?.pathname === '/admin/coupon-codes') {
-        dispatch(deleteCoupon({ id: props.rowArray }, token))
+        // dispatch(deleteCoupon({ id: props.rowArray }, token))
       }
     }
   }

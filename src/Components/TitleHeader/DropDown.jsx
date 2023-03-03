@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { Dropdown, DropdownButton } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
-import { getRevenue } from '../../Actions/Center/purchaseLicense'
+// import { useDispatch } from 'react-redux'
+// import { getRevenue } from '../../Actions/Center/purchaseLicense'
 import ls from 'localstorage-slim'
 function DropDown () {
-  const token = localStorage.getItem('token')
+  // const token = localStorage.getItem('token')
   const profile = JSON.parse(localStorage.getItem('profile'))
   const adminType = ls.get('admin-type', { decrypt: true, secret: profile?.id })
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const [selected, setSelected] = useState('current_month')
   const handlechange = (event) => {
     setSelected(event.target.value)
   }
   useEffect(() => {
     if (adminType === 'center') {
-      dispatch(getRevenue(selected, token, 'center'))
+      // dispatch(getRevenue(selected, token, 'center'))
     } else {
-      dispatch(getRevenue(selected, token, 'counsellor'))
+      // dispatch(getRevenue(selected, token, 'counsellor'))
     }
   }, [selected])
   return (

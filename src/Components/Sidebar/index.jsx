@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useSnackbar } from 'react-notistack'
+import React, { useEffect } from 'react'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { useSnackbar } from 'react-notistack'
 import Accordion from 'react-bootstrap/Accordion'
 import { NavLink, useNavigate } from 'react-router-dom'
 // Images
@@ -28,15 +28,15 @@ import PropTypes from 'prop-types'
 import defaultimage from '../../assets/images/default_profile.jpg'
 
 // Action File
-import { logoutAction } from '../../Actions/auth'
-import { getCounsellorDataAction } from '../../Actions/Counsellor/dashboard'
+// import { logoutAction } from '../../Actions/auth'
+// import { getCounsellorDataAction } from '../../Actions/Counsellor/dashboard'
 import ls from 'localstorage-slim'
 // import localStorage from 'react-secure-storage'
 // import { getCounsellorDataAction } from '../../Actions/Counsellor/dashboard'
 function Sidebar (props) {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const { enqueueSnackbar } = useSnackbar()
+  // const dispatch = useDispatch()
+  // const { enqueueSnackbar } = useSnackbar()
 
   // localStorage
   const roles = JSON.parse(localStorage.getItem('roles'))
@@ -45,20 +45,20 @@ function Sidebar (props) {
   const token = localStorage.getItem('token')
 
   // useSelector
-  const data = useSelector((state) => state.auth.isLoggedOut)
-  const dataMessage = useSelector((state) => state.auth.resMessage)
-  const profileData = useSelector((state) => state.dashboard.counsellorData)
-  const previousProps = useRef({ data, dataMessage }).current
+  // const data = useSelector((state) => state.auth.isLoggedOut)
+  // const dataMessage = useSelector((state) => state.auth.resMessage)
+  // const profileData = useSelector((state) => state.dashboard.counsellorData)
+  // const previousProps = useRef({ data, dataMessage }).current
 
   const handleLogout = () => {
     localStorage.removeItem('token')
     // localStorage.setItem('isLogin', '0')
     if (adminType === 'super' || adminType === 'sub') {
-      dispatch(logoutAction(token, 'admin'))
+      // dispatch(logoutAction(token, 'admin'))
     } else if (adminType === 'center') {
-      dispatch(logoutAction(token, 'center'))
+      // dispatch(logoutAction(token, 'center'))
     } else {
-      dispatch(logoutAction(token, 'counsellor'))
+      // dispatch(logoutAction(token, 'counsellor'))
     }
     setTimeout(() => {
       if (
@@ -80,32 +80,32 @@ function Sidebar (props) {
     open: false
   }
   // Toastify Notification
-  useEffect(() => {
-    if (previousProps?.data !== data) {
-      if (data) {
-        enqueueSnackbar(`${dataMessage}`, {
-          variant: 'success',
-          hide: 2000,
-          autoHide: true
-        })
-        // navigate('/admin/login')
-      } else if (data === false) {
-        enqueueSnackbar(`${dataMessage}`, {
-          variant: 'error',
-          hide: 2000,
-          autoHide: true,
-          TransitionComponent: 'Fade'
-        })
-      }
-    }
-    return () => {
-      previousProps.data = data
-    }
-  }, [data])
+  // useEffect(() => {
+  //   if (previousProps?.data !== data) {
+  //     if (data) {
+  //       enqueueSnackbar(`${dataMessage}`, {
+  //         variant: 'success',
+  //         hide: 2000,
+  //         autoHide: true
+  //       })
+  //       // navigate('/admin/login')
+  //     } else if (data === false) {
+  //       enqueueSnackbar(`${dataMessage}`, {
+  //         variant: 'error',
+  //         hide: 2000,
+  //         autoHide: true,
+  //         TransitionComponent: 'Fade'
+  //       })
+  //     }
+  //   }
+  //   return () => {
+  //     previousProps.data = data
+  //   }
+  // }, [data])
 
   useEffect(() => {
     if (token && adminType === 'counsellor') {
-      dispatch(getCounsellorDataAction(token))
+      // dispatch(getCounsellorDataAction(token))
     }
   }, [token && adminType === 'counsellor'])
 
@@ -167,7 +167,7 @@ function Sidebar (props) {
                 <li className='user-name'>
                   <NavLink to='/counsellor/profile' className='menu-link'>
                     <span>
-                      {profileData?.first_name} {profileData?.last_name}
+                      {/* {profileData?.first_name} {profileData?.last_name} */}
                     </span>
                   </NavLink>
                 </li>
