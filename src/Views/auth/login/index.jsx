@@ -4,7 +4,7 @@ import { Button, Form } from 'react-bootstrap'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 // Components
 import Language from '../../../Components/Language'
@@ -27,7 +27,6 @@ const adminValidationSchema = yup.object().shape({
 })
 
 function Login () {
-  const navigate = useNavigate()
   const [isShowPassword, setShowPassword] = useState(false)
   const [disable] = useState(false)
   const [type, setType] = useState('password')
@@ -158,11 +157,7 @@ function Login () {
           </div>
           <div className='redirect-to-signup'>
             <p>
-              Don&apos;t have an account yet?{' '}
-              <button className='formlink' onClick={() => {
-                navigate('/admin/signup')
-                window.location.reload(false)
-              }} >Create an account</button>
+              Don&apos;t have an account yet?<Link to={'/admin/signup'}>Create an account</Link>
             </p>
           </div>
         </div>

@@ -1,40 +1,201 @@
-import React from 'react'
-/* import LogoBg from '../../../assets/images/icon-bglogo.png' */
-// import { ProgressBar } from 'react-bootstrap'
-import { useLocation, Link } from 'react-router-dom'
+import React, { useState } from 'react'
+import { Form, Button } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import AuthLeftLogo from '../../../Components/AuthLeftLogo'
-// import CounsellorEducationDetails from '../../../Components/Signup/CounsellorEducationDetails'
-// import CounsellorKYCDetails from '../../../Components/Signup/CounsellorKYCDetails'
-import BackArrow from '../../../Components/BackArrow'
-import CounsellorDetails from '../../../Components/Signup/CounsellorDetails'
+import * as yup from 'yup'
+
 function SignUp () {
-  // const [now, setNow] = useState(0)
-  const location = useLocation()
-  // const [url, setUrl] = useState(['/'])
-  // useEffect(() => {
-  //   if (location?.pathname === '/educationdetails') {
-  //     setUrl('/signup')
-  //   } else {
-  //     setUrl('/')
-  //   }
-  // }, [])
+  const adminValidationSchema = yup.object().shape({
+    email: yup
+      .string()
+      .required('E-Mail is required')
+      .test('test-name', 'Enter Valid E-Mail', function (value) {
+        const emailRegex = /.+@.+\.[A-Za-z]+$/
+        const isValidEmail = emailRegex.test(value)
+        if (!isValidEmail) {
+          return false
+        }
+        return true
+      }),
+    first_name: yup.string().required('First Name is required'),
+    last_name: yup.string().required('Last Name is required'),
+    password: yup.string().required('Password is required'),
+    confirm_password: yup.string().oneOf([yup.ref('password'), null], 'Confirm password is not match').required('Confirm Password is required')
+  })
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({
+    resolver: yupResolver(adminValidationSchema)
+  })
+  const { onChange, name } = register('email', 'password')
+  const [disable] = useState(false)
+  const [type, setType] = useState('password')
+  const [typeConfirm, setTypeConfirm] = useState('password')
+  const [isShowPassword, setShowPassword] = useState(false)
+  const [isShowConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  const handleShowHidePassword = () => {
+    if (type === 'password') {
+      setType('text')
+      setShowPassword(true)
+    } else {
+      setType('password')
+      setShowPassword(false)
+    }
+  }
+
+  const handleShowHideConfirmPassword = () => {
+    if (typeConfirm === 'password') {
+      setTypeConfirm('text')
+      setShowConfirmPassword(true)
+    } else {
+      setTypeConfirm('password')
+      setShowConfirmPassword(false)
+    }
+  }
+
+  const onSubmit = (data) => {
+    console.log(data)
+  }
   return (
     <>
       <div className="common-layout">
-       <AuthLeftLogo />
+        <AuthLeftLogo />
         <div className="form-box-section">
-        {/* <ProgressBar now={now} /> */}
-         <div className="middle-form signup-page">
-         <BackArrow location={location} />
-          <div className="title-box">
+          <div className="middle-form signup-page">
+            <div className="title-box">
               <h2>Sign Up</h2>
             </div>
-              <CounsellorDetails setNow={ 0 } />
-              {/* <CounsellorEducationDetails /> */}
-         {/* <CounsellorKYCDetails /> */}
+            <Form onSubmit={handleSubmit(onSubmit)}>
+
+              <Form.Group
+                className={`form-group ${errors.email?.type ? 'error-occured' : ''
+                  }`}
+                controlId='formBasicEmail'>
+                <Form.Label>E-Mail</Form.Label>
+                <Form.Control
+                  type='text'
+                  name={name}
+                  placeholder='Enter E-Mail'
+                  onChange={onChange}
+                  {...register('email', { required: true })}
+                />
+                {errors.email?.message && (
+                  <Form.Text className='error-msg'>
+                    {errors.email?.message}{' '}
+                  </Form.Text>
+                )}
+              </Form.Group>
+
+              <Form.Group
+                className={`form-group ${errors.first_name?.type ? 'error-occured' : ''
+                  }`}
+                controlId='formFirstName'>
+                <Form.Label>First Name</Form.Label>
+                <Form.Control
+                  type='text'
+                  name={name}
+                  placeholder='Enter First Name'
+                  onChange={onChange}
+                  {...register('first_name', { required: true })}
+                />
+                {errors.first_name?.message && (
+                  <Form.Text className='error-msg'>
+                    {errors.first_name?.message}{' '}
+                  </Form.Text>
+                )}
+              </Form.Group>
+
+              <Form.Group
+                className={`form-group ${errors.last_name?.type ? 'error-occured' : ''
+                  }`}
+                controlId='formLastName'>
+                <Form.Label>Last Name</Form.Label>
+                <Form.Control
+                  type='text'
+                  name={name}
+                  placeholder='Enter Last Name'
+                  onChange={onChange}
+                  {...register('last_name', { required: true })}
+                />
+                {errors.last_name?.message && (
+                  <Form.Text className='error-msg'>
+                    {errors.last_name?.message}{' '}
+                  </Form.Text>
+                )}
+              </Form.Group>
+
+              <Form.Group
+                className={`form-group ${errors.password?.type ? 'error-occured' : ''
+                  }`}
+                controlId='formBasicPassword'>
+                <div className='label-box'>
+                  <Form.Label>Password</Form.Label>
+                </div>
+                <div className='password-box '>
+                  <Form.Control
+                    type={type}
+                    placeholder='Password'
+                    name={name}
+                    onChange={onChange}
+                    {...register('password', { required: true })}
+                  />
+                  <span
+                    className={`show-hide-pass ${isShowPassword ? 'show-pass' : ''
+                      }`}
+                    onClick={handleShowHidePassword}
+                  ></span>
+                </div>
+                {errors.password?.message && (
+                  <Form.Text className='error-msg'>
+                    {errors.password?.message}{' '}
+                  </Form.Text>
+                )}
+              </Form.Group>
+              <Form.Group
+                className={`form-group ${errors.confirm_password?.type ? 'error-occured' : ''
+                  }`}
+                controlId='formBasicPassword'>
+                <div className='label-box'>
+                  <Form.Label>Confirm Password</Form.Label>
+                  <Link to='/admin/forgot-password'>Forgot Password?</Link>
+                </div>
+                <div className='password-box '>
+                  <Form.Control
+                    type={typeConfirm}
+                    placeholder='Confirm Password'
+                    name={name}
+                    {...register('confirm_password', { required: true })}
+                  />
+                  <span
+                    className={`show-hide-pass ${isShowConfirmPassword ? 'show-pass' : ''
+                      }`}
+                    onClick={handleShowHideConfirmPassword}
+                  ></span>
+                </div>
+
+                {errors.confirm_password?.message && (
+                  <Form.Text className='error-msg'>
+                    {errors.confirm_password?.message}{' '}
+                  </Form.Text>
+                )}
+              </Form.Group>
+              <Button
+                variant='primary'
+                type='submit'
+                className='theme-btn large-btn'
+                disabled={disable}
+              >
+                Sign Up
+              </Button>
+            </Form>
           </div>
           <div className="redirect-to-signin">
-            <p>Already have an account? <Link to="/counsellor/login">Login</Link></p>
+            <p>Already have an account? <Link to="/admin/login">Login</Link></p>
           </div>
         </div>
       </div>
