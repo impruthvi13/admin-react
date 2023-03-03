@@ -9,6 +9,8 @@ import { Link, useNavigate } from 'react-router-dom'
 // Components
 import Language from '../../../Components/Language'
 import AuthLeftLogo from '../../../Components/AuthLeftLogo'
+import useHttp from '../../../Shared/Hooks/use-http'
+import { loginUser } from '../../../Shared/libs/auth-api'
 
 // Validation-Scheme for fields
 const adminValidationSchema = yup.object().shape({
@@ -31,6 +33,7 @@ function Login () {
   const [isShowPassword, setShowPassword] = useState(false)
   const [disable] = useState(false)
   const [type, setType] = useState('password')
+  const { sendRequest } = useHttp(loginUser)
 
   const {
     register,
@@ -51,8 +54,9 @@ function Login () {
       setShowPassword(false)
     }
   }
-  const onSubmit = (data) => {
-    console.log(data)
+  const onSubmit = async (data) => {
+    // console.log(data)
+    sendRequest(data)
   }
 
   // Toastify Notification for Counsellor Login
