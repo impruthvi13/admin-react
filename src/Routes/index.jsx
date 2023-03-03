@@ -32,7 +32,7 @@ function RoutesFile () {
       <Route
           exact
           path='/admin/signup'
-          element={<PublicRoute element={<Login />} />}
+          element={<PublicRoute element={<SignUp />} />}
         />
         <Route
           exact
