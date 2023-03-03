@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { emailVerification, mobileVerification } from '../../../Actions/auth'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { emailVerification, mobileVerification } from '../../../Actions/auth'
 import Modal from '../VerificationModal'
 import { useSnackbar } from 'react-notistack'
 import moment from 'moment'
@@ -113,8 +113,8 @@ function CounsellorDetails (props) {
 
   /* modal */
   const [show, setShow] = useState(false)
-  const [, setIsVerifiedFlag] = useState(false)
-  const [isMobileVerifiedFlag, setMobileVerificationFlag] = useState(false)
+  // const [, setIsVerifiedFlag] = useState(false)
+  // const [isMobileVerifiedFlag, setMobileVerificationFlag] = useState(false)
   const [email, setEmail] = useState('')
   const [mobile, setMobile] = useState('')
   const [otp, setOTP] = useState('')
@@ -128,13 +128,13 @@ function CounsellorDetails (props) {
     setOTP(childData)
   }
 
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   let startdate = moment()
   startdate = startdate.subtract(20, 'years')
   startdate = startdate.format('YYYY-MM-DD')
-  const isVerified = useSelector((state) => state.auth.isOTPSignupVerified)
-  const isDone = useSelector((state) => state.auth.isMobileOTPSend)
-  const isOtpSent = useSelector((state) => state.auth.isMobileOTPVerification)
+  // const isVerified = useSelector((state) => state.auth.isOTPSignupVerified)
+  // const isDone = useSelector((state) => state.auth.isMobileOTPSend)
+  // const isOtpSent = useSelector((state) => state.auth.isMobileOTPVerification)
   const {
     register,
     watch,
@@ -147,22 +147,22 @@ function CounsellorDetails (props) {
   })
 
   // Mobile verification useEffect
-  useEffect(() => {
-    if (isMobileVerifiedFlag === true) {
-      setMobileVerificationFlag(true)
-    } else {
-      setMobileVerificationFlag(false)
-    }
-  }, [isOtpSent])
+  // useEffect(() => {
+  //   if (isMobileVerifiedFlag === true) {
+  //     setMobileVerificationFlag(true)
+  //   } else {
+  //     setMobileVerificationFlag(false)
+  //   }
+  // }, [isOtpSent])
 
   // To verify otp useEffect
-  useEffect(() => {
-    if (isVerified === true) {
-      setIsVerifiedFlag(true)
-    } else {
-      setIsVerifiedFlag(false)
-    }
-  }, [isVerified])
+  // useEffect(() => {
+  //   if (isVerified === true) {
+  //     setIsVerifiedFlag(true)
+  //   } else {
+  //     setIsVerifiedFlag(false)
+  //   }
+  // }, [isVerified])
 
   const { onChange, onBlur, name } = register(
     'firstName',
@@ -185,7 +185,7 @@ function CounsellorDetails (props) {
         emailMobile: email
       }
       if (userData) {
-        dispatch(emailVerification(userData))
+        // dispatch(emailVerification(userData))
       }
       setShow(true)
     }
@@ -203,7 +203,7 @@ function CounsellorDetails (props) {
         emailMobile: mobile
       }
       if (userData) {
-        dispatch(mobileVerification(userData))
+        // dispatch(mobileVerification(userData))
       }
       setShow(true)
     }
@@ -457,9 +457,7 @@ function CounsellorDetails (props) {
         </Form.Group>
         <Form.Group
           // className="form-group"
-          className={`form-group ${
-            errors.mobileNumber?.message ? 'error-occured' : ''
-          } ${isDone || user?.isDone ? 'verified' : ''}`}
+          className={'form-group'}
           controlId='formBasicmobile'
         >
           <Form.Label>Mobile Number</Form.Label>
@@ -494,9 +492,7 @@ function CounsellorDetails (props) {
         </Form.Group>
         <Form.Group
           // className="form-group verified"
-          className={`form-group ${
-            errors.email?.message ? 'error-occured' : ''
-          } ${isVerified || user?.isVerified ? 'verified' : ''}`}
+          className={'form-group'}
           controlId='formBasicEmail'
         >
           <Form.Label>Email ID</Form.Label>

@@ -56,7 +56,7 @@ function RoutesFile () {
         />
         <Route
           exact
-          path='/admin/settings/my-profile/editmyprofile'
+          path='/admin/settings/myprofile/editmyprofile'
           element={<PrivateRoute element={<EditmyprofileAdmin />} />}
         />
       </Routes>
