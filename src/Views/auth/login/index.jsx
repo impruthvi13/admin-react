@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 /* import LogoBg from '../../../assets/images/icon-bglogo.png' */
 import { Button, Form } from 'react-bootstrap'
 
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useDispatch, useSelector } from 'react-redux'
-import { useSnackbar } from 'react-notistack'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { useSnackbar } from 'react-notistack'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 
 // Components
@@ -14,7 +14,7 @@ import Language from '../../../Components/Language'
 import AuthLeftLogo from '../../../Components/AuthLeftLogo'
 
 // Action
-import { login, adminLogin, centerLogin } from '../../../Actions/auth'
+// import { login, adminLogin, centerLogin } from '../../../Actions/auth'
 
 // Validation-Scheme for fields
 const adminValidationSchema = yup.object().shape({
@@ -50,17 +50,17 @@ const cValidationSchema = yup.object().shape({
 })
 
 function Login () {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const [isShowPassword, setShowPassword] = useState(false)
   const [disable, setDisable] = useState(false)
   const [type, setType] = useState('password')
-  const { enqueueSnackbar } = useSnackbar()
-  const isAuth = useSelector(state => state.auth.isAuthenticated)
-  const isLogged = useSelector(state => state.auth.isLogin)
-  const isAuthMessage = useSelector(state => state.auth.resMessage)
-  const previousProps = useRef({ isAuth, isLogged, isAuthMessage }).current
+  // const { enqueueSnackbar } = useSnackbar()
+  // const isAuth = useSelector(state => state.auth.isAuthenticated)
+  // const isLogged = useSelector(state => state.auth.isLogin)
+  // const isAuthMessage = useSelector(state => state.auth.resMessage)
+  // const previousProps = useRef({ isAuth, isLogged, isAuthMessage }).current
 
   // useEffect(() => {
   //   localStorage.setItem('isLogin', '0')
@@ -104,67 +104,67 @@ function Login () {
 
     if (userData) {
       // eslint-disable-next-line no-lone-blocks
-      {
-        location?.pathname === '/counsellor/login' || location?.pathname === '/'
-          ? dispatch(login(userData, navigate))
-          : location?.pathname === '/center/login'
-            ? dispatch(centerLogin(userData, navigate))
-            : dispatch(adminLogin(userData, navigate))
-      }
+      // {
+      //   location?.pathname === '/counsellor/login' || location?.pathname === '/'
+      //     ? dispatch(login(userData, navigate))
+      //     : location?.pathname === '/center/login'
+      //       ? dispatch(centerLogin(userData, navigate))
+      //       : dispatch(adminLogin(userData, navigate))
+      // }
     }
   }
 
   // Toastify Notification for Counsellor Login
-  useEffect(() => {
-    if (previousProps?.isAuth !== isAuth) {
-      if (isAuth) {
-        setDisable(true)
-        enqueueSnackbar(`${isAuthMessage}`, {
-          variant: 'success',
-          hide: 2000,
-          autoHide: true
-        })
-      } else if (isAuth === false) {
-        setDisable(false)
-        enqueueSnackbar(`${isAuthMessage}`, {
-          variant: 'error',
-          hide: 2000,
-          autoHide: true,
-          TransitionComponent: 'Fade'
-        }
-        )
-      }
-    }
-    return () => {
-      previousProps.isAuth = isAuth
-    }
-  }, [isAuth])
+  // useEffect(() => {
+  //   if (previousProps?.isAuth !== isAuth) {
+  //     if (isAuth) {
+  //       setDisable(true)
+  //       enqueueSnackbar(`${isAuthMessage}`, {
+  //         variant: 'success',
+  //         hide: 2000,
+  //         autoHide: true
+  //       })
+  //     } else if (isAuth === false) {
+  //       setDisable(false)
+  //       enqueueSnackbar(`${isAuthMessage}`, {
+  //         variant: 'error',
+  //         hide: 2000,
+  //         autoHide: true,
+  //         TransitionComponent: 'Fade'
+  //       }
+  //       )
+  //     }
+  //   }
+  //   return () => {
+  //     previousProps.isAuth = isAuth
+  //   }
+  // }, [isAuth])
 
   // // Toastify Notification
-  useEffect(() => {
-    if (previousProps?.isLogged !== isLogged) {
-      setDisable(true)
-      if (isLogged) {
-        enqueueSnackbar(`${isAuthMessage}`, {
-          variant: 'success',
-          hide: 2000,
-          autoHide: true
-        })
-      } else if (isLogged === false) {
-        setDisable(false)
-        enqueueSnackbar(`${isAuthMessage}`, {
-          variant: 'error',
-          hide: 2000,
-          autoHide: true,
-          TransitionComponent: 'Fade'
-        }
-        )
-      }
-    }
-    return () => {
-      previousProps.isLogged = isLogged
-    }
-  }, [isLogged])
+  // useEffect(() => {
+  //   if (previousProps?.isLogged !== isLogged) {
+  //     setDisable(true)
+  //     if (isLogged) {
+  //       enqueueSnackbar(`${isAuthMessage}`, {
+  //         variant: 'success',
+  //         hide: 2000,
+  //         autoHide: true
+  //       })
+  //     } else if (isLogged === false) {
+  //       setDisable(false)
+  //       enqueueSnackbar(`${isAuthMessage}`, {
+  //         variant: 'error',
+  //         hide: 2000,
+  //         autoHide: true,
+  //         TransitionComponent: 'Fade'
+  //       }
+  //       )
+  //     }
+  //   }
+  //   return () => {
+  //     previousProps.isLogged = isLogged
+  //   }
+  // }, [isLogged])
 
   // Custom HandleChange Function to handle initial values and set fields values
   const onHandleChange = (e, type) => {

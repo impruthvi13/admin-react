@@ -1,12 +1,13 @@
-import React, { useState, useRef, useEffect } from 'react'
+// import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useDispatch, useSelector } from 'react-redux'
-import { useSnackbar } from 'react-notistack'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { useSnackbar } from 'react-notistack'
 import Header from '../../../Components/Header'
-import { changePassword } from '../../../Actions/auth'
+// import { changePassword } from '../../../Actions/auth'
 import ls from 'localstorage-slim'
 // import localStorage from 'react-secure-storage'
 
@@ -41,10 +42,10 @@ const validationSchema = yup.object().shape({
 })
 
 function ChangePassword () {
-  const dispatch = useDispatch()
-  const { enqueueSnackbar } = useSnackbar()
-  const token = localStorage.getItem('token')
-  const [adminType, setAdmintype] = useState()
+  // const dispatch = useDispatch()
+  // const { enqueueSnackbar } = useSnackbar()
+  // const token = localStorage.getItem('token')
+  // const [adminType, setAdmintype] = useState()
   const profile = JSON.parse(localStorage.getItem('profile'))
   const admintype = ls.get('admin-type', { decrypt: true, secret: profile?.id })
 
@@ -53,18 +54,18 @@ function ChangePassword () {
   const [isShowPassword, setShowPassword] = useState(false)
 
   // useSelector
-  const resMessageFlag = useSelector((state) => state.auth.resMessage)
-  const isChanged = useSelector((state) => state.auth.isPasswordChanged)
-  const previousProps = useRef({ isChanged, resMessageFlag }).current
+  // const resMessageFlag = useSelector((state) => state.auth.resMessage)
+  // const isChanged = useSelector((state) => state.auth.isPasswordChanged)
+  // const previousProps = useRef({ isChanged, resMessageFlag }).current
 
   useEffect(() => {
     if (
       admintype === 'super' ||
       admintype === 'sub'
     ) {
-      setAdmintype('admin')
+      // setAdmintype('admin')
     } else if (admintype === 'center') {
-      setAdmintype('center')
+      // setAdmintype('center')
     }
   }, [])
 
@@ -72,8 +73,8 @@ function ChangePassword () {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-    reset
+    formState: { errors }
+    // reset
   } = useForm({
     resolver: yupResolver(validationSchema)
   })
@@ -81,14 +82,14 @@ function ChangePassword () {
 
   // Submit Method
   const onSubmit = (data) => {
-    const userData = {
-      currentPassword: data.currentPassword,
-      confirmPassword: data.cPassword,
-      password: data.password
-    }
-    if (userData) {
-      dispatch(changePassword(userData, token, adminType))
-    }
+    // const userData = {
+    //   currentPassword: data.currentPassword,
+    //   confirmPassword: data.cPassword,
+    //   password: data.password
+    // }
+    // if (userData) {
+    //   dispatch(changePassword(userData, token, adminType))
+    // }
   }
 
   // Handle method show/hide password
@@ -103,27 +104,27 @@ function ChangePassword () {
   }
 
   // Toastify Notification
-  useEffect(() => {
-    if (previousProps?.isChanged !== isChanged) {
-      if (isChanged === true) {
-        reset()
-        enqueueSnackbar(`${resMessageFlag}`, {
-          variant: 'success',
-          autoHide: true,
-          hide: 3000
-        })
-      } else if (isChanged === false) {
-        enqueueSnackbar(`${resMessageFlag}`, {
-          variant: 'error',
-          autoHide: true,
-          hide: 3000
-        })
-      }
-    }
-    return () => {
-      previousProps.isChanged = isChanged
-    }
-  }, [isChanged])
+  // useEffect(() => {
+  //   if (previousProps?.isChanged !== isChanged) {
+  //     if (isChanged === true) {
+  //       reset()
+  //       enqueueSnackbar(`${resMessageFlag}`, {
+  //         variant: 'success',
+  //         autoHide: true,
+  //         hide: 3000
+  //       })
+  //     } else if (isChanged === false) {
+  //       enqueueSnackbar(`${resMessageFlag}`, {
+  //         variant: 'error',
+  //         autoHide: true,
+  //         hide: 3000
+  //       })
+  //     }
+  //   }
+  //   return () => {
+  //     previousProps.isChanged = isChanged
+  //   }
+  // }, [isChanged])
 
   return (
     <>
