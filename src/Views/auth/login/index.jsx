@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Form } from 'react-bootstrap'
-
+import { useSnackbar } from 'react-notistack'
 import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 // Components
 import Language from '../../../Components/Language'
@@ -32,7 +32,24 @@ function Login () {
   const [isShowPassword, setShowPassword] = useState(false)
   const [disable] = useState(false)
   const [type, setType] = useState('password')
-  const { sendRequest } = useHttp(loginUser)
+  const { sendRequest, status, error: loginError, data } = useHttp(loginUser)
+  const { enqueueSnackbar } = useSnackbar()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (status === 'completed') {
+      localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_NAME, data.headers['x-authorization-token'])
+      navigate('/admin/dashboard')
+    }
+    if (status === 'error') {
+      enqueueSnackbar(loginError, {
+        variant: 'error',
+        autoHide: true,
+        hide: 3000,
+        TransitionComponent: 'Fade'
+      })
+    }
+  }, [status, navigator])
 
   const {
     register,
@@ -54,35 +71,8 @@ function Login () {
     }
   }
   const onSubmit = async (data) => {
-    // console.log(data)
     sendRequest(data)
   }
-
-  // Toastify Notification for Counsellor Login
-  // useEffect(() => {
-  //   if (previousProps?.isAuth !== isAuth) {
-  //     if (isAuth) {
-  //       setDisable(true)
-  //       enqueueSnackbar(`${isAuthMessage}`, {
-  //         variant: 'success',
-  //         hide: 2000,
-  //         autoHide: true
-  //       })
-  //     } else if (isAuth === false) {
-  //       setDisable(false)
-  //       enqueueSnackbar(`${isAuthMessage}`, {
-  //         variant: 'error',
-  //         hide: 2000,
-  //         autoHide: true,
-  //         TransitionComponent: 'Fade'
-  //       }
-  //       )
-  //     }
-  //   }
-  //   return () => {
-  //     previousProps.isAuth = isAuth
-  //   }
-  // }, [isAuth])
 
   return (
     <>

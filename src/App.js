@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react'
 import { BrowserRouter } from 'react-router-dom'
+import { SnackbarProvider } from 'react-notistack'
 
 /* NPM-Packages */
 import './App.css'
@@ -14,6 +15,18 @@ function App () {
       <Helmet>
         <title>Ollato</title>
       </Helmet>
+      <SnackbarProvider maxSnack={2} anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right'
+      }}
+      iconVariant={{
+        success: '✅',
+        error: '✖️',
+        warning: '⚠️',
+        info: 'ℹ️'
+      }}
+      // TransitionComponent={Fade}
+     >
 
       {/* <meta name="description" content="App Description" /> */}
       {/* <meta name="theme-color" content="#008f68" /> */}
@@ -25,6 +38,7 @@ function App () {
           </BrowserRouter>
         {/* <SignUp /> */}
       </div>
+     </SnackbarProvider>
     </>
   )
 }
