@@ -21,7 +21,7 @@ function httpReducer (state, action) {
     return {
       data: null,
       error: action.errorMessage,
-      status: 'completed'
+      status: 'error'
     }
   }
 
@@ -44,7 +44,7 @@ function useHttp (requestFunction, startWithPending = false) {
       } catch (error) {
         dispatch({
           type: 'ERROR',
-          errorMessage: error.message || 'Something went wrong!'
+          errorMessage: error.response.data.meta.message || 'Something went wrong!'
         })
       }
     },
