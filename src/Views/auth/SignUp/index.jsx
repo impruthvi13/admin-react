@@ -1,12 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Button } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import AuthLeftLogo from '../../../Components/AuthLeftLogo'
 import * as yup from 'yup'
+import useHttp from '../../../Shared/Hooks/use-http'
+import { signUpUser } from '../../../Shared/libs/auth-api'
+import { useSnackbar } from 'react-notistack'
 
 function SignUp () {
+  const { sendRequest, status, error: signupError } = useHttp(signUpUser)
   const adminValidationSchema = yup.object().shape({
     email: yup
       .string()
@@ -22,7 +26,7 @@ function SignUp () {
     first_name: yup.string().required('First Name is required'),
     last_name: yup.string().required('Last Name is required'),
     password: yup.string().required('Password is required'),
-    confirm_password: yup.string().oneOf([yup.ref('password'), null], 'Confirm password is not match').required('Confirm Password is required')
+    passwordConfirm: yup.string().oneOf([yup.ref('password'), null], 'Confirm password is not match').required('Confirm Password is required')
   })
   const {
     register,
@@ -37,6 +41,22 @@ function SignUp () {
   const [typeConfirm, setTypeConfirm] = useState('password')
   const [isShowPassword, setShowPassword] = useState(false)
   const [isShowConfirmPassword, setShowConfirmPassword] = useState(false)
+  const navigate = useNavigate()
+  const { enqueueSnackbar } = useSnackbar()
+
+  useEffect(() => {
+    if (status === 'completed') {
+      navigate('/admin/login')
+    }
+    if (status === 'error') {
+      enqueueSnackbar(signupError, {
+        variant: 'error',
+        autoHide: true,
+        hide: 3000,
+        TransitionComponent: 'Fade'
+      })
+    }
+  }, [status, navigator])
 
   const handleShowHidePassword = () => {
     if (type === 'password') {
@@ -58,8 +78,8 @@ function SignUp () {
     }
   }
 
-  const onSubmit = (data) => {
-    console.log(data)
+  const onSubmit = async (data) => {
+    sendRequest(data)
   }
   return (
     <>
@@ -157,7 +177,7 @@ function SignUp () {
                 )}
               </Form.Group>
               <Form.Group
-                className={`form-group ${errors.confirm_password?.type ? 'error-occured' : ''
+                className={`form-group ${errors.passwordConfirm?.type ? 'error-occured' : ''
                   }`}
                 controlId='formBasicPassword'>
                 <div className='label-box'>
@@ -169,7 +189,7 @@ function SignUp () {
                     type={typeConfirm}
                     placeholder='Confirm Password'
                     name={name}
-                    {...register('confirm_password', { required: true })}
+                    {...register('passwordConfirm', { required: true })}
                   />
                   <span
                     className={`show-hide-pass ${isShowConfirmPassword ? 'show-pass' : ''
@@ -178,9 +198,9 @@ function SignUp () {
                   ></span>
                 </div>
 
-                {errors.confirm_password?.message && (
+                {errors.passwordConfirm?.message && (
                   <Form.Text className='error-msg'>
-                    {errors.confirm_password?.message}{' '}
+                    {errors.passwordConfirm?.message}{' '}
                   </Form.Text>
                 )}
               </Form.Group>
