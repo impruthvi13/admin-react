@@ -19,6 +19,7 @@ import PublicRoute from './PublicRoute'
 import Login from '../Views/auth/login'
 import ForgotPassword from '../Views/auth/ForgotPassword'
 import SignUp from '../Views/auth/SignUp'
+import AddNewUser from '../Views/admin/Users/AddNewUser'
 
 function RoutesFile () {
   return (
@@ -43,6 +44,11 @@ function RoutesFile () {
           exact
           path='/admin/dashboard'
           element={<PrivateRoute element={<Dashboard />} />}
+        />
+        <Route
+          exact
+          path='/admin/add-user'
+          element={<PrivateRoute element={<AddNewUser />} />}
         />
         <Route
           exact
