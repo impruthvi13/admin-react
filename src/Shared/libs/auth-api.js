@@ -10,7 +10,6 @@ export async function loginUser (userData) {
 
   return response
 }
-
 export async function signUpUser (userData) {
   const response = await axios.post(API_SIGNUP_ENDPOINT, userData, { headers: { 'Content-Type': 'application/json', accept: 'application/json' } })
   return response
