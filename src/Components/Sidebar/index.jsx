@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 // import { useDispatch, useSelector } from 'react-redux'
 // import { useSnackbar } from 'react-notistack'
 import Accordion from 'react-bootstrap/Accordion'
@@ -15,7 +15,8 @@ import dashboard from '../../assets/images/sidebar-icons/dashboard.svg'
 
 import closebtn from '../../assets/images/close-circle-mobile.svg'
 import PropTypes from 'prop-types'
-
+import { getAdminSideBar } from '../../Shared/libs/sidebar-api'
+import useHttp from '../../Shared/Hooks/use-http'
 // Action File
 // import { logoutAction } from '../../Actions/auth'
 // import { getCounsellorDataAction } from '../../Actions/Counsellor/dashboard'
@@ -23,6 +24,8 @@ import PropTypes from 'prop-types'
 // import localStorage from 'react-secure-storage'
 // import { getCounsellorDataAction } from '../../Actions/Counsellor/dashboard'
 function Sidebar (props) {
+  const { sendRequest, data: sideBarsData } = useHttp(getAdminSideBar)
+
   // const dispatch = useDispatch()
   // const { enqueueSnackbar } = useSnackbar()
 
@@ -30,13 +33,17 @@ function Sidebar (props) {
   // const roles = JSON.parse(localStorage.getItem('roles'))
   // const profile = JSON.parse(localStorage.getItem('profile'))
   // const adminType = ls.get('admin-type', { decrypt: true, secret: profile?.id })
-  // const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token')
 
   // useSelector
   // const data = useSelector((state) => state.auth.isLoggedOut)
   // const dataMessage = useSelector((state) => state.auth.resMessage)
   // const profileData = useSelector((state) => state.dashboard.counsellorData)
   // const previousProps = useRef({ data, dataMessage }).current
+
+  useEffect(() => {
+    sendRequest(token)
+  }, [])
 
   const handleLogout = () => {
     // localStorage.removeItem('token')
@@ -88,21 +95,20 @@ function Sidebar (props) {
           </div>
           <ul className='sidebar-menu'>
             {/* Dashboard */}
-              <>
-                <li>
-                  <NavLink
-                    to='/admin/dashboard'
-                    className='menu-link'
-                  >
-                    {' '}
-                    <div className='icon-box'>
-                      <img src={dashboard} alt='logo sidebar' />
-                    </div>
-                    <span>Dashboard</span>
-                  </NavLink>
-                </li>
-              </>
-              <li>
+              {sideBarsData?.data.data.map((sideBar, index) => {
+                return (<li key={index}>
+                <NavLink
+                  to={`admin/${sideBar.name}`}
+                  className='menu-link'
+                >
+                  <div className='icon-box'>
+                    <img src={dashboard} alt='logo sidebar' />
+                  </div>
+                  <span> {sideBar.name} </span>
+                </NavLink>
+              </li>)
+              })}
+              {/* <li>
                 <NavLink
                   to='/admin/settings/myprofile'
                   className='menu-link'
@@ -112,7 +118,7 @@ function Sidebar (props) {
                   </div>
                   <span>My Profile</span>
                 </NavLink>
-              </li>
+              </li> */}
           </ul>
         </div>
         {/* Logout Button */}
