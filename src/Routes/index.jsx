@@ -20,6 +20,7 @@ import Login from '../Views/auth/login'
 import ForgotPassword from '../Views/auth/ForgotPassword'
 import SignUp from '../Views/auth/SignUp'
 import AddNewUser from '../Views/admin/Users/AddNewUser'
+import GetAllUsers from '../Views/admin/Users/GetAllUsers'
 
 function RoutesFile () {
   return (
@@ -49,6 +50,11 @@ function RoutesFile () {
           exact
           path='/admin/add-user'
           element={<PrivateRoute element={<AddNewUser />} />}
+        />
+        <Route
+          exact
+          path='/admin/users'
+          element={<PrivateRoute element={<GetAllUsers />} />}
         />
         <Route
           exact
