@@ -20,12 +20,12 @@ import TitleHeader from '../../../Components/TitleHeader'
 /* Action File */
 import DeleteModal from '../../../Components/DeleteModal/DeleteModal'
 import ActiveButton from '../../../Shared/Component/ActiveButton'
-import { getUsersData } from '../../../Shared/libs/auth-api'
+import { getUsers } from '../../../Actions/user'
 import useHttp from '../../../Shared/Hooks/use-http'
 import { Spinner } from 'react-bootstrap'
 export default function GetAllUsers () {
   // const dispatch = useDispatch()
-  const { sendRequest, data: userData, status: getUserStatus } = useHttp(getUsersData, true)
+  const { sendRequest, data: userData, status: getUserStatus } = useHttp(getUsers, true)
 
   const location = useLocation()
   // const { enqueueSnackbar } = useSnackbar()

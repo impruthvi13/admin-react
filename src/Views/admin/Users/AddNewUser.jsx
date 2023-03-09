@@ -5,12 +5,12 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import Header from '../../../Components/Header'
 import useHttp from '../../../Shared/Hooks/use-http'
-import { registerUser } from '../../../Shared/libs/auth-api'
+import { addUser } from '../../../Actions/user'
 import { useSnackbar } from 'react-notistack'
 import * as yup from 'yup'
 
 export default function AddNewUser () {
-  const { sendRequest, status, error: addNewUserError } = useHttp(registerUser)
+  const { sendRequest, status, error: addNewUserError } = useHttp(addUser)
   const navigate = useNavigate()
   const [type, setType] = useState('password')
   const [typeConfirm, setTypeConfirm] = useState('password')
