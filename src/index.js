@@ -5,6 +5,8 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import 'bootstrap/scss/bootstrap.scss'
 import './assets/scss/main.scss'
+import store from './Store/index'
+import { Provider } from 'react-redux'
 const root = ReactDOM.createRoot(document.getElementById('root'))
-root.render(<App />)
+root.render(<Provider store={store}><App /></Provider>)
 reportWebVitals()
