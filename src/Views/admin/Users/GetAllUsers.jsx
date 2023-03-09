@@ -42,9 +42,9 @@ export default function GetAllUsers () {
   const [show, setShow] = useState(false)
   const [rowArray, setRowArray] = useState([])
   const [limit, setLimit] = useState(10)
+  const [offset] = useState(0)
+  // const [start] = useState(0)
   // const [sort] = useState('title')
-  const [, setStart] = useState(0)
-//   const [start, setStart] = useState(0)
   // const [order] = useState('asc')
   // const [search, setSearch] = useState('')
 //   const [id, setId] = useState('')
@@ -52,8 +52,8 @@ export default function GetAllUsers () {
 
   useEffect(() => {
     const token = localStorage.getItem('token')
-    sendRequest(token)
-  }, [])
+    sendRequest({ offset: offset, limit, token })
+  }, [offset, limit])
 
   // useSelector
   // const resMessage = useSelector(state => state.CoupenCodesAdmin.resMessage)
@@ -207,23 +207,10 @@ export default function GetAllUsers () {
   ]
 
   // Pagination
-  const onPageChange = (page, sizePerPage) => {
+  const onPageChange = (page) => {
     setPageNo(page)
-    setStart(limit * (page - 1) - 1 < 0 ? 0 : limit * (page - 1))
-    // if (page === 1) {
-    //   dispatch(getAllCouponCodes(0, limit, sort, order, search, token))
-    // } else {
-    //   dispatch(
-    //     getAllCouponCodes(
-    //       limit * (page - 1) - 1 < 0 ? 0 : limit * (page - 1),
-    //       limit,
-    //       sort,
-    //       order,
-    //       search,
-    //       token
-    //     )
-    //   )
-    // }
+    const token = localStorage.getItem('token')
+    sendRequest({ offset: limit * (page - 1), limit, token })
   }
 
   // pagePerLimit
@@ -237,7 +224,7 @@ export default function GetAllUsers () {
     hideSizePerPage: true,
     hidePageListOnlyOnePage: false,
     alwaysShowAllBtns: true,
-    totalSize: userData?.data?.totalData,
+    totalSize: userData?.data?.links?.total_count,
     remote: { pagination: true },
     onPageChange,
     page: +pageNo

@@ -21,7 +21,8 @@ export async function registerUser (userData) {
   return response
 }
 
-export async function getUsersData (token) {
-  const response = await axios.get(API_LIST_USERS, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` } })
+export async function getUsersData (userData) {
+  const { offset, limit, token } = userData
+  const response = await axios.get(API_LIST_USERS, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` }, params: { limit: limit, offset: offset } })
   return response
 }
