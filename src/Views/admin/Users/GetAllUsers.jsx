@@ -20,7 +20,7 @@ import TitleHeader from '../../../Components/TitleHeader'
 /* Action File */
 import DeleteModal from '../../../Components/DeleteModal/DeleteModal'
 import ActiveButton from '../../../Shared/Component/ActiveButton'
-import { getUsers } from '../../../Actions/user'
+import { getUsers } from '../../../Store/Actions/user'
 import useHttp from '../../../Shared/Hooks/use-http'
 import { Spinner } from 'react-bootstrap'
 export default function GetAllUsers () {

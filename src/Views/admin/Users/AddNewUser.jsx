@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import Header from '../../../Components/Header'
 import useHttp from '../../../Shared/Hooks/use-http'
-import { addUser } from '../../../Actions/user'
+import { addUser } from '../../../Store/Actions/user'
 import { useSnackbar } from 'react-notistack'
 import * as yup from 'yup'
 

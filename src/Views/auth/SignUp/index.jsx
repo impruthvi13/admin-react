@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import AuthLeftLogo from '../../../Components/AuthLeftLogo'
 import * as yup from 'yup'
 import useHttp from '../../../Shared/Hooks/use-http'
-import { signUpUser } from '../../../Actions/auth'
+import { signUpUser } from '../../../Store/Actions/auth'
 import { useSnackbar } from 'react-notistack'
 
 function SignUp () {
