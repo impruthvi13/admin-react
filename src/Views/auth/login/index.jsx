@@ -10,7 +10,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Language from '../../../Components/Language'
 import AuthLeftLogo from '../../../Components/AuthLeftLogo'
 import useHttp from '../../../Shared/Hooks/use-http'
-import { loginUser } from '../../../Shared/libs/auth-api'
+import { loginUser } from '../../../Store/Actions/auth'
 
 // Validation-Scheme for fields
 const adminValidationSchema = yup.object().shape({
