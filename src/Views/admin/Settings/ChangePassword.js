@@ -10,7 +10,7 @@ import Header from '../../../Components/Header'
 // import localStorage from 'react-secure-storage'
 import useHttp from '../../../Shared/Hooks/use-http'
 import { changeAdminPassword } from '../../../Store/Actions/auth'
-import { Navigate } from 'react-router-dom'
+// import { Navigate } from 'react-router-dom'
 import { useSnackbar } from 'react-notistack'
 // Regex for password
 const passRegex =
@@ -77,7 +77,7 @@ function ChangePassword () {
 
   useEffect(() => {
     if (status === 'completed') {
-      //sucess notification code 
+      // sucess notification code
     }
     if (status === 'error') {
       enqueueSnackbar(signupError, {
