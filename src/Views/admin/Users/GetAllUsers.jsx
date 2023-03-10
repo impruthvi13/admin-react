@@ -23,8 +23,11 @@ import ActiveButton from '../../../Shared/Component/ActiveButton'
 import { getUsers } from '../../../Store/Actions/user'
 import useHttp from '../../../Shared/Hooks/use-http'
 import { Spinner } from 'react-bootstrap'
+import { useDispatch, useSelector } from 'react-redux'
+import { userActions } from '../../../Store/Slices/user'
 export default function GetAllUsers () {
-  // const dispatch = useDispatch()
+  const token = localStorage.getItem('token')
+  const dispatch = useDispatch()
   const { sendRequest, data: userData, status: getUserStatus } = useHttp(getUsers, true)
 
   const location = useLocation()
@@ -38,54 +41,32 @@ export default function GetAllUsers () {
   ]
 
   // useState
-  const [pageNo, setPageNo] = useState(1)
   const [show, setShow] = useState(false)
   const [rowArray, setRowArray] = useState([])
-  const [limit, setLimit] = useState(10)
-  const [offset] = useState(0)
-  // const [start] = useState(0)
   // const [sort] = useState('title')
   // const [order] = useState('asc')
   // const [search, setSearch] = useState('')
 //   const [id, setId] = useState('')
   // const [usersArray, setUsersArray] = useState([])
 
+  // useSelector
+  // const isCouponDeleted = useSelector(state => state.CoupenCodesAdmin.isCouponDeleted)
+  const users = useSelector(state => state.user.users)
+  const usersCount = useSelector(state => state.user.usersCount)
+  const offset = useSelector(state => state.user.offset)
+  const limit = useSelector(state => state.user.limit)
+  const pageNo = useSelector(state => state.user.pageNo)
+  // const resMessage = useSelector(state => state.CoupenCodesAdmin.resMessage)
+
   useEffect(() => {
-    const token = localStorage.getItem('token')
-    sendRequest({ offset: offset, limit, token })
+    sendRequest({ offset, limit, token })
   }, [offset, limit])
 
-  // useSelector
-  // const resMessage = useSelector(state => state.CoupenCodesAdmin.resMessage)
-  // const isCouponDeleted = useSelector(state => state.CoupenCodesAdmin.isCouponDeleted)
-  // const isCouponCodeEdited = useSelector(state => state.CoupenCodesAdmin.isCouponCodeEdited)
-  // const coupenCodeList = useSelector(state => state.CoupenCodesAdmin.coupenCodeList)
-  // const isLoading = useSelector(state => state.CoupenCodesAdmin.isLoading)
-  // const count = useSelector(state => state.CoupenCodesAdmin.coupenCodeCount)
-
-  // previousProps
-  // const previousProps = useRef({
-  //   coupenCodeList,
-  //   resMessage,
-  //   isCouponDeleted,
-  //   isCouponCodeEdited
-  // }).current
-
-  // useEffect for listing Data
-  // useEffect(() => {
-  // dispatch(getAllCouponCodes(start, limit, sort, order, search, token))
-  // }, [])
-
-  // useEffect(() => {
-  //   if (previousProps?.coupenCodeList !== coupenCodeList) {
-  //     if (coupenCodeList) {
-  //       setCouponArray(coupenCodeList)
-  //     }
-  //   }
-  //   return () => {
-  //     previousProps.coupenCodeList = coupenCodeList
-  //   }
-  // }, [coupenCodeList])
+  useEffect(() => {
+    if (getUserStatus === 'completed') {
+      dispatch(userActions.allUsers(userData))
+    }
+  }, [dispatch, userData])
 
   const actionbutton = (row, cell) => {
     return <ActiveButton id={cell?.id} handleShow={handleShow} slug='coupon-codes' viewlink='/admin/coupon-codes/view-coupon-code' editlink='/admin/coupon-codes/edit-coupon-code' />
@@ -149,7 +130,7 @@ export default function GetAllUsers () {
   //   }
   // }
 
-  const users = userData?.data.data || []
+  // const users = userData?.data.data || []
   const columns = [
     {
       dataField: 'Sr.no',
@@ -207,16 +188,13 @@ export default function GetAllUsers () {
   ]
 
   // Pagination
-  const onPageChange = (page) => {
-    setPageNo(page)
-    const token = localStorage.getItem('token')
-    sendRequest({ offset: limit * (page - 1), limit, token })
+  const onPageChange = (pageNo) => {
+    dispatch(userActions.allUsers({ limit, offset: limit * (pageNo - 1), pageNo }))
   }
 
   // pagePerLimit
   const handlePagePerLimit = (e) => {
-    setLimit(e.value)
-    // dispatch(getAllCouponCodes(start, e.value, sort, order, search, token))
+    dispatch(userActions.allUsers({ limit: e.value, offset, pageNo }))
   }
 
   const options = {
@@ -224,7 +202,7 @@ export default function GetAllUsers () {
     hideSizePerPage: true,
     hidePageListOnlyOnePage: false,
     alwaysShowAllBtns: true,
-    totalSize: userData?.data?.links?.total_count,
+    totalSize: usersCount,
     remote: { pagination: true },
     onPageChange,
     page: +pageNo
@@ -302,10 +280,10 @@ export default function GetAllUsers () {
 
   return (
     <>
-      <Header name="Coupen Code List" searchbar={true} />
+      <Header name="Users List" searchbar={true} />
       <TitleHeader
-        name="Coupen Code"
-        title="Coupen Code Management"
+        name="Users"
+        title="Users Management"
         url="add-coupon-code"
         setRowArray={setRowArray}
         rowArray={rowArray}
