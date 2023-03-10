@@ -1,23 +1,24 @@
 // import React, { useState, useRef, useEffect } from 'react'
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 // import { useDispatch, useSelector } from 'react-redux'
-// import { useSnackbar } from 'react-notistack'
 import Header from '../../../Components/Header'
-// import { changePassword } from '../../../Actions/auth'
-import ls from 'localstorage-slim'
+// import ls from 'localstorage-slim'
 // import localStorage from 'react-secure-storage'
-
+import useHttp from '../../../Shared/Hooks/use-http'
+import { changeAdminPassword } from '../../../Store/Actions/auth'
+import { Navigate } from 'react-router-dom'
+import { useSnackbar } from 'react-notistack'
 // Regex for password
 const passRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
 
 // Validations Schema
 const validationSchema = yup.object().shape({
-  currentPassword: yup.string().required('Please Enter Current Password'),
+  current_password: yup.string().required('Please Enter Current Password'),
   password: yup
     .string()
     .required('Password is required')
@@ -25,14 +26,14 @@ const validationSchema = yup.object().shape({
       'passwords-match',
       'Passwords should be unique from current password',
       function (value) {
-        return this.parent.currentPassword !== value
+        return this.parent.current_password !== value
       }
     )
     .matches(
       passRegex,
       'Password must contain at least eight characters, at least one number and both lower and uppercase letters and special characters'
     ),
-  cPassword: yup
+  password_confirmation: yup
     .string()
     .required('Confirm Password is required')
     .oneOf(
@@ -42,33 +43,11 @@ const validationSchema = yup.object().shape({
 })
 
 function ChangePassword () {
-  // const dispatch = useDispatch()
-  // const { enqueueSnackbar } = useSnackbar()
-  // const token = localStorage.getItem('token')
-  // const [adminType, setAdmintype] = useState()
-  const profile = JSON.parse(localStorage.getItem('profile'))
-  const admintype = ls.get('admin-type', { decrypt: true, secret: profile?.id })
-
-  // useState
+  const { sendRequest, status, error: signupError } = useHttp(changeAdminPassword)
+  const token = localStorage.getItem('token')
+  const { enqueueSnackbar } = useSnackbar()
   const [type, setType] = useState('password')
   const [isShowPassword, setShowPassword] = useState(false)
-
-  // useSelector
-  // const resMessageFlag = useSelector((state) => state.auth.resMessage)
-  // const isChanged = useSelector((state) => state.auth.isPasswordChanged)
-  // const previousProps = useRef({ isChanged, resMessageFlag }).current
-
-  useEffect(() => {
-    if (
-      admintype === 'super' ||
-      admintype === 'sub'
-    ) {
-      // setAdmintype('admin')
-    } else if (admintype === 'center') {
-      // setAdmintype('center')
-    }
-  }, [])
-
   // useForm
   const {
     register,
@@ -78,18 +57,11 @@ function ChangePassword () {
   } = useForm({
     resolver: yupResolver(validationSchema)
   })
-  const { onChange, name } = register('password', 'cPassword')
+  const { onChange, name } = register('password', 'password_confirmation')
 
   // Submit Method
   const onSubmit = (data) => {
-    // const userData = {
-    //   currentPassword: data.currentPassword,
-    //   confirmPassword: data.cPassword,
-    //   password: data.password
-    // }
-    // if (userData) {
-    //   dispatch(changePassword(userData, token, adminType))
-    // }
+    sendRequest({ token, data })
   }
 
   // Handle method show/hide password
@@ -103,28 +75,19 @@ function ChangePassword () {
     }
   }
 
-  // Toastify Notification
-  // useEffect(() => {
-  //   if (previousProps?.isChanged !== isChanged) {
-  //     if (isChanged === true) {
-  //       reset()
-  //       enqueueSnackbar(`${resMessageFlag}`, {
-  //         variant: 'success',
-  //         autoHide: true,
-  //         hide: 3000
-  //       })
-  //     } else if (isChanged === false) {
-  //       enqueueSnackbar(`${resMessageFlag}`, {
-  //         variant: 'error',
-  //         autoHide: true,
-  //         hide: 3000
-  //       })
-  //     }
-  //   }
-  //   return () => {
-  //     previousProps.isChanged = isChanged
-  //   }
-  // }, [isChanged])
+  useEffect(() => {
+    if (status === 'completed') {
+      //sucess notification code 
+    }
+    if (status === 'error') {
+      enqueueSnackbar(signupError, {
+        variant: 'error',
+        autoHide: true,
+        hide: 3000,
+        TransitionComponent: 'Fade'
+      })
+    }
+  }, [status, navigator])
 
   return (
     <>
@@ -148,7 +111,7 @@ function ChangePassword () {
                     <div className='col-xl-6 col-lg-8 col-md-10'>
                       <Form.Group
                         className={`form-group ${
-                          errors.currentPassword?.message ? 'error-occured' : ''
+                          errors.current_password?.message ? 'error-occured' : ''
                         }`}
                         controlId='formnewPassword'
                       >
@@ -157,13 +120,13 @@ function ChangePassword () {
                           <Form.Control
                             type='password'
                             placeholder='Enter Current Password'
-                            {...register('currentPassword', { required: true })}
+                            {...register('current_password', { required: true })}
                           />
                         </div>
                         <Form.Text className='error-msg'></Form.Text>
-                        {errors.currentPassword?.message && (
+                        {errors.current_password?.message && (
                           <Form.Text className='error-msg'>
-                            {errors.currentPassword?.message}{' '}
+                            {errors.current_password?.message}{' '}
                           </Form.Text>
                         )}
                       </Form.Group>
@@ -217,7 +180,7 @@ function ChangePassword () {
                     <div className='col-xl-6 col-lg-8 col-md-10'>
                       <Form.Group
                         className={`form-group ${
-                          errors.cPassword?.message ? 'error-occured' : ''
+                          errors.password_confirmation?.message ? 'error-occured' : ''
                         }`}
                         controlId='formconfirmPassword'
                       >
@@ -230,11 +193,11 @@ function ChangePassword () {
                             onChange={(e) => {
                               onChange(e)
                             }}
-                            {...register('cPassword', { required: true })}
+                            {...register('password_confirmation', { required: true })}
                           />
-                          {errors.cPassword?.message && (
+                          {errors.password_confirmation?.message && (
                             <Form.Text className='error-msg'>
-                              {errors.cPassword?.message}{' '}
+                              {errors.password_confirmation?.message}{' '}
                             </Form.Text>
                           )}
                         </div>
