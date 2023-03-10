@@ -19,7 +19,7 @@ const userSlice = createSlice({
     allUsers (state, action) {
         state.users = action.payload.data ? action.payload?.data : state.users
         state.limit = action.payload.limit ? +action.payload.limit : state.limit
-        state.offset = action.payload.offset ? +action.payload.offset : state.offset
+        state.offset = action.payload.offset || action.payload.offset === 0 ? +action.payload.offset : state.offset
         state.pageNo = action.payload.pageNo ? +action.payload.pageNo : state.pageNo
         state.usersCount = action.payload?.links?.total_count ? +action.payload?.links?.total_count : state.usersCount
         // state.search = action.payload?.links?.search
