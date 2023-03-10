@@ -69,7 +69,7 @@ export default function GetAllUsers () {
   }, [dispatch, userData])
 
   const actionbutton = (row, cell) => {
-    return <ActiveButton id={cell?.id} handleShow={handleShow} slug='coupon-codes' viewlink='/admin/coupon-codes/view-coupon-code' editlink='/admin/coupon-codes/edit-coupon-code' />
+    return <ActiveButton id={cell?.id} handleShow={handleShow} slug='coupon-codes' viewlink='/admin/users' editlink='/admin/users/edit' />
   }
 
   // Function to delete Row in table
