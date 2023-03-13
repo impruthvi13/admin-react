@@ -42,7 +42,7 @@ function Login () {
       localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_NAME, data.headers['x-authorization-token'])
       ls.set(process.env.REACT_APP_AUTH_USER, data.data.data, {
         encrypt: true,
-        secret: process.env.REACT_APP_LOCAL_STORAGE_ENCRYPT
+        secret: +process.env.REACT_APP_LOCAL_STORAGE_ENCRYPT
       })
       // localStorage.setItem(process.env.REACT_APP_AUTH_USER, JSON.stringify(data.data.data))
       navigate('/admin/dashboard')
