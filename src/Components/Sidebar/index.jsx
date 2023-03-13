@@ -101,7 +101,7 @@ function Sidebar (props) {
               </li>
             <li>
                 <NavLink
-                  to='/admin/add-user'
+                  to='/admin/users'
                   className='menu-link'
                 >
                   <div className='icon-box'>

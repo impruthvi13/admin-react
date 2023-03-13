@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
 // import { useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 // import { Spinner } from 'react-bootstrap'
 // import { useSnackbar } from 'react-notistack'
 import Select from 'react-select'
@@ -292,16 +292,23 @@ export default function GetAllUsers () {
         showbuttons={true}
       />
       <div className="row">
-        <div className="col-md-12 text-end filterboxcontent">
-          <div className="categoryfilterbtn text-center sizeperpagebtn">
-            <Select
-              classNamePrefix="filter-custom"
-              className="filter-time-btn withrightimg"
-              isSearchable={false}
-              options={pagePerLimitArray}
-              defaultValue={{ value: 10, label: 10 }}
-              onChange={e => handlePagePerLimit(e)}
-            />
+        <div className='d-flex justify-content-between'>
+          <div className="col-md-6 text-end filterboxcontent">
+            <div className="categoryfilterbtn text-center sizeperpagebtn">
+              <Select
+                classNamePrefix="filter-custom"
+                className="filter-time-btn withrightimg"
+                isSearchable={false}
+                options={pagePerLimitArray}
+                defaultValue={{ value: 10, label: 10 }}
+                onChange={e => handlePagePerLimit(e)}
+              />
+            </div>
+          </div>
+          <div className="col-md-6 text-end">
+              <Link to='add' className='theme-btn text-none'>
+                  Add User
+              </Link>
           </div>
         </div>
         <div className="col-md-12">
