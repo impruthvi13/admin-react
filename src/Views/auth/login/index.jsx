@@ -5,6 +5,7 @@ import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Link, useNavigate } from 'react-router-dom'
+import ls from 'localstorage-slim'
 
 // Components
 import Language from '../../../Components/Language'
@@ -39,6 +40,11 @@ function Login () {
   useEffect(() => {
     if (status === 'completed') {
       localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_NAME, data.headers['x-authorization-token'])
+      ls.set(process.env.REACT_APP_AUTH_USER, data.data.data, {
+        encrypt: true,
+        secret: process.env.REACT_APP_LOCAL_STORAGE_ENCRYPT
+      })
+      // localStorage.setItem(process.env.REACT_APP_AUTH_USER, JSON.stringify(data.data.data))
       navigate('/admin/dashboard')
     }
     if (status === 'error') {
