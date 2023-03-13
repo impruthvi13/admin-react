@@ -7,13 +7,11 @@ import defaultimage from '../../assets/images/default.jpeg'
 import PropTypes from 'prop-types'
 
 function Header (props) {
-  const profiledata = JSON.parse(localStorage.getItem('profile'))
-  const adminType = ls.get('admin-type', {
+  const profiledata = ls.get(process.env.REACT_APP_AUTH_USER, {
     decrypt: true,
-    secret: profiledata?.id
+    secret: process.env.REACT_APP_LOCAL_STORAGE_ENCRYPT
   })
   const navigate = useNavigate()
-  // const location = useLocation()
 
   const handleChange = (e) => {
     const value = e.target.value
@@ -46,40 +44,20 @@ function Header (props) {
           <button
             className='profile-box '
             onClick={() => {
-              if (adminType === 'center') {
-                navigate('/center/settings/myprofile')
-              } else if (adminType === 'counsellor') {
-                navigate('/counsellor/profile')
-              } else {
                 navigate('/admin/settings/myprofile')
-              }
             }}
           >
             <img
               src={
-                profiledata?.profile_pic
-                  ? `${process.env.REACT_APP_AXIOS_BASE_URL}${profiledata?.profile_pic}`
-                  : profiledata?.profile
-                    ? `${process.env.REACT_APP_AXIOS_BASE_URL}${profiledata?.profile}`
-                    : profiledata?.profile_picture ? `${process.env.REACT_APP_AXIOS_BASE_URL}${profiledata?.profile_picture}` : defaultimage
+                profiledata?.profile
+                  ? `${profiledata?.profile}`
+                  : defaultimage
               }
               alt=''
             />
-            {adminType === 'super' || adminType === 'sub'
-              ? (
               <h6>
-                {profiledata?.first_name} {profiledata?.last_name}{' '}
+                {profiledata?.full_name}
               </h6>
-                )
-              : adminType === 'center'
-                ? (
-              <h6>{profiledata?.title}</h6>
-                  )
-                : adminType === 'counsellor'
-                  ? (
-              <h6>{profiledata?.first_name} {profiledata?.last_name}{' '}</h6>
-                    )
-                  : null}
           </button>
         </div>
       </header>
