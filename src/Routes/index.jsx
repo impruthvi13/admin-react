@@ -48,7 +48,7 @@ function RoutesFile () {
         />
         <Route
           exact
-          path='/admin/add-user'
+          path='/admin/users/add'
           element={<PrivateRoute element={<AddNewUser />} />}
         />
         <Route
