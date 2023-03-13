@@ -9,7 +9,7 @@ import PropTypes from 'prop-types'
 function Header (props) {
   const profiledata = ls.get(process.env.REACT_APP_AUTH_USER, {
     decrypt: true,
-    secret: process.env.REACT_APP_LOCAL_STORAGE_ENCRYPT
+    secret: +process.env.REACT_APP_LOCAL_STORAGE_ENCRYPT
   })
   const navigate = useNavigate()
 
