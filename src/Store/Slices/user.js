@@ -27,6 +27,9 @@ const userSlice = createSlice({
         // state.sort_column = action.payload?.links?.sort_column
         // state.sort_order = action.payload?.links?.sort_order
         // state.message = action.payload?.meta?.message
+    },
+    updateUserStatus (state, action) {
+      state.users[action.payload.index] = action.payload.obj
     }
   }
 })

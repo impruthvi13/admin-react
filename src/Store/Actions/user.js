@@ -11,3 +11,9 @@ export async function getUsers (userData) {
     const response = await axios.get(API_LIST_USERS, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` }, params: { limit, offset } })
     return response.data
 }
+
+export async function editUser (userData) {
+  const { data, token, id } = userData
+  const response = await axios.put(`${API_ADD_NEW_USER_ENDPOINT}/${id}`, data, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` } })
+  return response.data
+}
