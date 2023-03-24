@@ -20,19 +20,21 @@ import TitleHeader from '../../../Components/TitleHeader'
 /* Action File */
 import DeleteModal from '../../../Components/DeleteModal/DeleteModal'
 import ActiveButton from '../../../Shared/Component/ActiveButton'
-import { getUsers } from '../../../Store/Actions/user'
+import { editUser, getUsers } from '../../../Store/Actions/user'
 import useHttp from '../../../Shared/Hooks/use-http'
 import { Spinner } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '../../../Store/Slices/user'
+import { useSnackbar } from 'react-notistack'
 export default function GetAllUsers () {
+  const { enqueueSnackbar } = useSnackbar()
+
   const token = localStorage.getItem('token')
   const dispatch = useDispatch()
   const { sendRequest, data: userData, status: getUserStatus } = useHttp(getUsers, true)
+  const { sendRequest: chnageStatusRequest, data: userStatusData, status: changeUserStatus } = useHttp(editUser)
 
   const location = useLocation()
-  // const { enqueueSnackbar } = useSnackbar()
-  // const token = localStorage.getItem('token')
 
   const pagePerLimitArray = [
     { value: 10, label: '10' },
@@ -43,11 +45,11 @@ export default function GetAllUsers () {
   // useState
   const [show, setShow] = useState(false)
   const [rowArray, setRowArray] = useState([])
+  // const [usersArray, setUsersArray] = useState([])
   // const [sort] = useState('title')
   // const [order] = useState('asc')
   // const [search, setSearch] = useState('')
 //   const [id, setId] = useState('')
-  // const [usersArray, setUsersArray] = useState([])
 
   // useSelector
   // const isCouponDeleted = useSelector(state => state.CoupenCodesAdmin.isCouponDeleted)
@@ -68,8 +70,19 @@ export default function GetAllUsers () {
     }
   }, [dispatch, userData])
 
+  useEffect(() => {
+    if (changeUserStatus === 'completed') {
+      enqueueSnackbar(userStatusData?.meta?.message, {
+        variant: 'success',
+        autoHide: true,
+        hide: 3000,
+        TransitionComponent: 'Fade'
+      })
+    }
+  }, [changeUserStatus])
+
   const actionbutton = (row, cell) => {
-    return <ActiveButton id={cell?.id} handleShow={handleShow} slug='coupon-codes' viewlink='/admin/users' editlink='/admin/users/edit' />
+    return <ActiveButton id={cell?.custom_id} handleShow={handleShow} slug='coupon-codes' viewlink='/admin/users' editlink='/admin/users/edit' />
   }
 
   // Function to delete Row in table
@@ -96,28 +109,26 @@ export default function GetAllUsers () {
   const switchAction = (row, cell, rowIndex) => {
     return (
       <label className="switch">
-        <input type="checkbox" checked={row === 'y'} onChange={e => handleChange(e, cell.id)} />
+        <input type="checkbox" checked={row === 'y'} onChange={e => handleChange(e, cell.custom_id, rowIndex)} />
         <span className="slider blue" id="round"></span>
       </label>
     )
   }
 
   // Function to handle switch of table
-  const handleChange = (e, id) => {
-    // const data = {
-    //   id,
-    //   isActive: e.target.checked ? 'y' : 'n',
-    //   updateType: 'status'
-    // }
-    // dispatch(editSpecificCoupon(data, token))
-    // setCouponArray(
-    //   couponArray?.map(item => {
-    //     if (item.id === id) {
-    //       item.is_active = e.target.checked ? 'y' : 'n'
-    //       return item
-    //     } else return item
-    //   })
-    // )
+  const handleChange = (e, id, index) => {
+    const data = {
+      id,
+      is_active: e.target.checked ? 'y' : 'n',
+      action: 'change_status'
+    }
+
+    chnageStatusRequest({ data, id, token })
+
+    const allUsers = [...users]
+    const statusUser = allUsers[index]
+    const obj = { ...statusUser, active: e.target.checked ? 'y' : 'n' }
+    dispatch(userActions.updateUserStatus({ index, obj }))
   }
 
   // Search
@@ -174,6 +185,10 @@ export default function GetAllUsers () {
     {
       dataField: 'email',
       text: 'Email'
+    },
+    {
+      dataField: 'contact_no',
+      text: 'Contact Number'
     },
     {
       dataField: 'active',
