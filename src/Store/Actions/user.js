@@ -4,7 +4,7 @@ import { API_ADD_NEW_USER_ENDPOINT, API_LIST_USERS } from '../../constants/apiEn
 export async function addUser (userData) {
     const { data, token } = userData
     const response = await axios.post(API_ADD_NEW_USER_ENDPOINT, data, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` } })
-    return response
+    return response.data
   }
 export async function getUsers (userData) {
     const { offset, limit, token } = userData
@@ -15,5 +15,11 @@ export async function getUsers (userData) {
 export async function editUser (userData) {
   const { data, token, id } = userData
   const response = await axios.put(`${API_ADD_NEW_USER_ENDPOINT}/${id}`, data, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` } })
+  return response.data
+}
+
+export async function showUser (userData) {
+  const { token, id } = userData
+  const response = await axios.get(`${API_ADD_NEW_USER_ENDPOINT}/${id}`, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` } })
   return response.data
 }
