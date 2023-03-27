@@ -8,9 +8,14 @@ import useHttp from '../../../Shared/Hooks/use-http'
 import { addUser } from '../../../Store/Actions/user'
 import { useSnackbar } from 'react-notistack'
 import * as yup from 'yup'
+import { userActions } from '../../../Store/Slices/user'
+import { useDispatch } from 'react-redux'
 
 export default function AddNewUser () {
-  const { sendRequest, status, error: addNewUserError } = useHttp(addUser)
+  const token = localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME)
+  const dispatch = useDispatch()
+
+  const { sendRequest, status, error: addNewUserError, data } = useHttp(addUser)
   const navigate = useNavigate()
   const [type, setType] = useState('password')
   const [typeConfirm, setTypeConfirm] = useState('password')
@@ -43,13 +48,13 @@ export default function AddNewUser () {
   })
 
   const onSubmit = (data) => {
-    const token = localStorage.getItem('token')
     sendRequest({ data, token })
   }
 
   useEffect(() => {
     if (status === 'completed') {
-      navigate('/admin/dashboard')
+      navigate('/admin/users')
+      dispatch(userActions.setResponseMessage(data?.meta?.message))
     }
     if (status === 'error') {
       enqueueSnackbar(addNewUserError, {

@@ -29,7 +29,7 @@ import { useSnackbar } from 'react-notistack'
 export default function GetAllUsers () {
   const { enqueueSnackbar } = useSnackbar()
 
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME)
   const dispatch = useDispatch()
   const { sendRequest, data: userData, status: getUserStatus } = useHttp(getUsers, true)
   const { sendRequest: chnageStatusRequest, data: userStatusData, status: changeUserStatus } = useHttp(editUser)
@@ -58,6 +58,7 @@ export default function GetAllUsers () {
   const offset = useSelector(state => state.user.offset)
   const limit = useSelector(state => state.user.limit)
   const pageNo = useSelector(state => state.user.pageNo)
+  const resMessage = useSelector(state => state.user.resMessage)
   // const resMessage = useSelector(state => state.CoupenCodesAdmin.resMessage)
 
   useEffect(() => {
@@ -80,6 +81,18 @@ export default function GetAllUsers () {
       })
     }
   }, [changeUserStatus])
+
+  useEffect(() => {
+    if (resMessage && resMessage !== null) {
+      enqueueSnackbar(resMessage, {
+        variant: 'success',
+        autoHide: true,
+        hide: 3000,
+        TransitionComponent: 'Fade'
+      })
+      dispatch(userActions.setResponseMessageNull())
+    }
+  }, [resMessage])
 
   const actionbutton = (row, cell) => {
     return <ActiveButton id={cell?.custom_id} handleShow={handleShow} slug='coupon-codes' viewlink='/admin/users' editlink='/admin/users/edit' />

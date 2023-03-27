@@ -5,17 +5,25 @@ import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import Header from '../../../Components/Header'
 import useHttp from '../../../Shared/Hooks/use-http'
-import { editUser } from '../../../Store/Actions/user'
+import { editUser, showUser } from '../../../Store/Actions/user'
 import { useSnackbar } from 'react-notistack'
+import { useDispatch } from 'react-redux'
+import { userActions } from '../../../Store/Slices/user'
 import * as yup from 'yup'
 import 'yup-phone'
 
 export default function AddNewUser () {
   // const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
   const { id } = useParams()
-  const { sendRequest, status, error: editUserError } = useHttp(editUser)
+  const token = localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME)
+  const dispatch = useDispatch()
+
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
+  const { sendRequest, status, error: editUserError, data: editUserData } = useHttp(editUser)
+  const { sendRequest: sendShowUserRequest, status: showUserStatue, data: userData } = useHttp(showUser)
+  // const [, setUser] = useState({})
+  // const [editUserData, setEditUserDat] = useState({})
   const validateSchemaAddNewUser = yup.object().shape({
     email: yup
       .string()
@@ -35,19 +43,33 @@ export default function AddNewUser () {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors }
   } = useForm({
     resolver: yupResolver(validateSchemaAddNewUser)
   })
 
   const onSubmit = (data) => {
-    const token = localStorage.getItem('token')
     sendRequest({ data, token, id })
   }
 
   useEffect(() => {
+    sendShowUserRequest({ token, id })
+  }, [])
+
+  useEffect(() => {
+    if (showUserStatue === 'completed') {
+      setValue('first_name', userData?.data?.first_name)
+      setValue('last_name', userData?.data?.last_name)
+      setValue('email', userData?.data?.email)
+      setValue('contact_no', userData?.data?.contact_no)
+    }
+  }, [showUserStatue])
+
+  useEffect(() => {
     if (status === 'completed') {
       navigate('/admin/users')
+      dispatch(userActions.setResponseMessage(editUserData?.meta?.message))
     }
     if (status === 'error') {
       enqueueSnackbar(editUserError, {
@@ -91,7 +113,7 @@ return (
                   type='text'
                   name={name}
                   placeholder='Enter First Name'
-                  {...register('first_name', { required: true })}
+                  {...register('first_name', { first_name: 'asd' }, { required: true })}
                 />
                 {errors.first_name?.message && (
                   <Form.Text className='error-msg'>

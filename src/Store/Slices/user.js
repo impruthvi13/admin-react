@@ -30,6 +30,12 @@ const userSlice = createSlice({
     },
     updateUserStatus (state, action) {
       state.users[action.payload.index] = action.payload.obj
+    },
+    setResponseMessage (state, action) {
+      state.resMessage = action.payload
+    },
+    setResponseMessageNull (state, action) {
+      state.resMessage = null
     }
   }
 })
