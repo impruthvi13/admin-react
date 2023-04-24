@@ -30,3 +30,12 @@ export const addUserSuccess = (user) =>
 
 export const addUserFailed = (error) =>
   createAction(USER_ACTION_TYPES.ADD_USER_FAILED, error)
+
+export const updateUserStart = (payload) =>
+  createAction(USER_ACTION_TYPES.UPDATE_USER_START, payload)
+
+export const updateUserSuccess = (user) =>
+  createAction(USER_ACTION_TYPES.UPDATE_USER_SUCCESS, user)
+
+export const updateUserFailed = (error) =>
+  createAction(USER_ACTION_TYPES.UPDATE_USER_FAILED, error)

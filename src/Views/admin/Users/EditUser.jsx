@@ -5,12 +5,13 @@ import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import Header from '../../../Components/Header'
 import useHttp from '../../../Shared/Hooks/use-http'
-import { editUser, showUser } from '../../../Store/Actions/user'
+import { showUser } from '../../../Store/Actions/user'
 import { useSnackbar } from 'react-notistack'
-import { useDispatch } from 'react-redux'
-import { userActions } from '../../../Store/Slices/user'
+import { useDispatch, useSelector } from 'react-redux'
 import * as yup from 'yup'
 import 'yup-phone'
+import { selectUserError, selectUsersResMessage } from '../../../Store/user/user.selector'
+import { setUserResponseNull, updateUserStart } from '../../../Store/user/user.action'
 
 export default function AddNewUser () {
   // const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
@@ -20,8 +21,10 @@ export default function AddNewUser () {
 
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
-  const { sendRequest, status, error: editUserError, data: editUserData } = useHttp(editUser)
+  // const { sendRequest, status, error: editUserError, data: editUserData } = useHttp(editUser)
   const { sendRequest: sendShowUserRequest, status: showUserStatue, data: userData } = useHttp(showUser)
+  const userError = useSelector(selectUserError)
+  const userResponse = useSelector(selectUsersResMessage)
   // const [, setUser] = useState({})
   // const [editUserData, setEditUserDat] = useState({})
   const validateSchemaAddNewUser = yup.object().shape({
@@ -50,7 +53,7 @@ export default function AddNewUser () {
   })
 
   const onSubmit = (data) => {
-    sendRequest({ data, token, id })
+    dispatch(updateUserStart({ data, token, id }))
   }
 
   useEffect(() => {
@@ -67,19 +70,19 @@ export default function AddNewUser () {
   }, [showUserStatue])
 
   useEffect(() => {
-    if (status === 'completed') {
+    if (userResponse && userResponse != null) {
       navigate('/admin/users')
-      dispatch(userActions.setResponseMessage(editUserData?.meta?.message))
     }
-    if (status === 'error') {
-      enqueueSnackbar(editUserError, {
+    if (userError && userError != null) {
+      enqueueSnackbar(userError, {
         variant: 'error',
         autoHide: true,
         hide: 3000,
         TransitionComponent: 'Fade'
       })
+      dispatch(setUserResponseNull())
     }
-  }, [status, navigator])
+  }, [userError, userResponse])
 
 return (
     <>
