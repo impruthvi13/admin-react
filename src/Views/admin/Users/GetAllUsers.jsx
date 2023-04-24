@@ -20,11 +20,9 @@ import TitleHeader from '../../../Components/TitleHeader'
 /* Action File */
 import DeleteModal from '../../../Components/DeleteModal/DeleteModal'
 import ActiveButton from '../../../Shared/Component/ActiveButton'
-// import { editUser } from '../../../Store/Actions/user'
 import { useDispatch, useSelector } from 'react-redux'
-import { userActions } from '../../../Store/Slices/user'
 import { useSnackbar } from 'react-notistack'
-import { fetchUserStart } from '../../../Store/user/user.action'
+import { changeUserStatusStart, fetchUserStart, setUserResponseNull } from '../../../Store/user/user.action'
 import { selectAllUsers, selectUserIsLoading, selectUsersCount, selectUsersLimit, selectUsersOffset, selectUsersPageNo, selectUsersResMessage } from '../../../Store/user/user.selector'
 export default function GetAllUsers () {
   const { enqueueSnackbar } = useSnackbar()
@@ -62,17 +60,6 @@ export default function GetAllUsers () {
     dispatch(fetchUserStart({ offset, limit, token }))
   }, [offset, limit])
 
-  // useEffect(() => {
-  //   if (changeUserStatus === 'completed') {
-  //     enqueueSnackbar(userStatusData?.meta?.message, {
-  //       variant: 'success',
-  //       autoHide: true,
-  //       hide: 3000,
-  //       TransitionComponent: 'Fade'
-  //     })
-  //   }
-  // }, [changeUserStatus])
-
   useEffect(() => {
     if (resMessage && resMessage !== null) {
       enqueueSnackbar(resMessage, {
@@ -81,7 +68,7 @@ export default function GetAllUsers () {
         hide: 3000,
         TransitionComponent: 'Fade'
       })
-      dispatch(userActions.setResponseMessageNull())
+      dispatch(setUserResponseNull())
     }
   }, [resMessage])
 
@@ -90,10 +77,7 @@ export default function GetAllUsers () {
   }
 
   // Function to delete Row in table
-  const handleShow = id => {
-    // setId(1f194_squaredid)
-    setShow(true)
-  }
+  const handleShow = () => setShow(true)
   const handleClose = () => setShow(false)
   const handleDelete = () => {
   }
@@ -121,18 +105,17 @@ export default function GetAllUsers () {
 
   // Function to handle switch of table
   const handleChange = (e, id, index) => {
-    // const data = {
-    //   id,
-    //   is_active: e.target.checked ? 'y' : 'n',
-    //   action: 'change_status'
-    // }
-
-    // chnageStatusRequest({ data, id, token })
+    const data = {
+      id,
+      is_active: e.target.checked ? 'y' : 'n',
+      action: 'change_status'
+    }
 
     const allUsers = [...users]
     const statusUser = allUsers[index]
     const obj = { ...statusUser, active: e.target.checked ? 'y' : 'n' }
-    dispatch(userActions.updateUserStatus({ index, obj }))
+    allUsers[index] = obj
+    dispatch(changeUserStatusStart({ users: allUsers, data, token, id }))
   }
 
   // Search
@@ -213,7 +196,6 @@ export default function GetAllUsers () {
 
   // pagePerLimit
   const handlePagePerLimit = (e) => {
-    dispatch(userActions.allUsers({ limit: e.value, offset, pageNo }))
     dispatch(fetchUserStart({ limit: e.value, offset, pageNo, token }))
   }
 

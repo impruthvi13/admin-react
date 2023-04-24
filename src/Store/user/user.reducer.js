@@ -31,7 +31,22 @@ export const userReducer = (state = INITIAL_USER, action) => {
         pageNo: payload && payload.params.pageNo ? payload.params.pageNo : state.pageNo,
         isLoading: false
       }
-
+    case USER_ACTION_TYPES.CHANGE_USER_STATUS_START:
+      return {
+        ...state,
+        users: payload.users,
+        isLoading: true
+      }
+    case USER_ACTION_TYPES.CHANGE_USER_STATUS_SUCCESS:
+      return {
+        ...state,
+        resMessage: payload?.meta?.message,
+        isLoading: false
+      }
+    case USER_ACTION_TYPES.CHANGE_USER_STATUS_FAILED:
+      return { ...state, isLoading: false, error: payload }
+    case USER_ACTION_TYPES.SET_USER_RESPONSE_NULL:
+      return { ...state, resMessage: null }
     default:
       return state
   }
