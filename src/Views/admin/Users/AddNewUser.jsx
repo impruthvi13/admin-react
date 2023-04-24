@@ -4,18 +4,18 @@ import { Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import Header from '../../../Components/Header'
-import useHttp from '../../../Shared/Hooks/use-http'
-import { addUser } from '../../../Store/Actions/user'
 import { useSnackbar } from 'react-notistack'
 import * as yup from 'yup'
-import { userActions } from '../../../Store/Slices/user'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { addUserStart, setUserResponseNull } from '../../../Store/user/user.action'
+import { selectUserError, selectUsersResMessage } from '../../../Store/user/user.selector'
 
 export default function AddNewUser () {
   const token = localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME)
   const dispatch = useDispatch()
 
-  const { sendRequest, status, error: addNewUserError, data } = useHttp(addUser)
+  const userError = useSelector(selectUserError)
+  const userResponse = useSelector(selectUsersResMessage)
   const navigate = useNavigate()
   const [type, setType] = useState('password')
   const [typeConfirm, setTypeConfirm] = useState('password')
@@ -48,23 +48,23 @@ export default function AddNewUser () {
   })
 
   const onSubmit = (data) => {
-    sendRequest({ data, token })
+    dispatch(addUserStart({ data, token }))
   }
 
   useEffect(() => {
-    if (status === 'completed') {
+    if (userResponse && userResponse != null) {
       navigate('/admin/users')
-      dispatch(userActions.setResponseMessage(data?.meta?.message))
     }
-    if (status === 'error') {
-      enqueueSnackbar(addNewUserError, {
+    if (userError && userError != null) {
+      enqueueSnackbar(userError, {
         variant: 'error',
         autoHide: true,
         hide: 3000,
         TransitionComponent: 'Fade'
       })
+      dispatch(setUserResponseNull())
     }
-  }, [status, navigator])
+  }, [userError, userResponse])
   const handleShowHidePassword = () => {
     if (type === 'password') {
       setType('text')

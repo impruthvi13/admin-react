@@ -21,3 +21,12 @@ export const changeUserStatusFailed = (payload) =>
 
 export const setUserResponseNull = () =>
   createAction(USER_ACTION_TYPES.SET_USER_RESPONSE_NULL)
+
+export const addUserStart = (payload) =>
+  createAction(USER_ACTION_TYPES.ADD_USER_START, payload)
+
+export const addUserSuccess = (user) =>
+  createAction(USER_ACTION_TYPES.ADD_USER_SUCCESS, user)
+
+export const addUserFailed = (error) =>
+  createAction(USER_ACTION_TYPES.ADD_USER_FAILED, error)

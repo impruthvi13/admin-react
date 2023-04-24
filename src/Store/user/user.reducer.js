@@ -19,8 +19,8 @@ export const userReducer = (state = INITIAL_USER, action) => {
   switch (type) {
     case USER_ACTION_TYPES.FETCH_USER_START:
       return { ...state, isLoading: true }
-    case USER_ACTION_TYPES.FETCH_USER_FAILED:
-      return { ...state, isLoading: false, error: payload }
+    case USER_ACTION_TYPES.FETCH_USER_FAILED || USER_ACTION_TYPES.CHANGE_USER_STATUS_FAILED:
+      return { ...state, isLoading: false, error: payload?.response?.data?.meta?.message }
     case USER_ACTION_TYPES.FETCH_USER_SUCCESS:
       return {
         ...state,
@@ -43,10 +43,16 @@ export const userReducer = (state = INITIAL_USER, action) => {
         resMessage: payload?.meta?.message,
         isLoading: false
       }
-    case USER_ACTION_TYPES.CHANGE_USER_STATUS_FAILED:
-      return { ...state, isLoading: false, error: payload }
     case USER_ACTION_TYPES.SET_USER_RESPONSE_NULL:
-      return { ...state, resMessage: null }
+      return { ...state, resMessage: null, error: null }
+    case USER_ACTION_TYPES.ADD_USER_START:
+      return { ...state, isLoading: true }
+    case USER_ACTION_TYPES.ADD_USER_SUCCESS:
+      return {
+        ...state,
+        resMessage: payload?.meta?.message,
+        isLoading: false
+      }
     default:
       return state
   }

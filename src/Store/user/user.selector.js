@@ -5,3 +5,4 @@ export const selectUsersLimit = (state) => state.user.limit
 export const selectUsersPageNo = (state) => state.user.pageNo
 export const selectUsersResMessage = (state) => state.user.resMessage
 export const selectUserIsLoading = (state) => state.user.isLoading
+export const selectUserError = (state) => state.user.error
