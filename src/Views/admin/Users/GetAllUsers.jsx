@@ -3,33 +3,30 @@ import React, { useEffect, useState } from 'react'
 /* React Packages */
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
-// import { useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import { Spinner } from 'react-bootstrap'
-// import { useSnackbar } from 'react-notistack'
 import Select from 'react-select'
 import orderup from '../../../assets/images/order-up.svg'
 import orderdown from '../../../assets/images/order-down.svg'
 import orderdefault from '../../../assets/images/order-default.svg'
+import { useSnackbar } from 'react-notistack'
 
 /* Components */
 import Header from '../../../Components/Header'
 import TitleHeader from '../../../Components/TitleHeader'
-// import DeleteModal from '../../../Components/DeleteModal'
-
-/* Action File */
 import DeleteModal from '../../../Components/DeleteModal/DeleteModal'
 import ActiveButton from '../../../Shared/Component/ActiveButton'
+
+/* Action File */
 import { useDispatch, useSelector } from 'react-redux'
-import { useSnackbar } from 'react-notistack'
 import { changeUserStatusStart, fetchUserStart, setUserResponseNull } from '../../../Store/user/user.action'
 import { selectAllUsers, selectUserIsLoading, selectUsersCount, selectUsersLimit, selectUsersOffset, selectUsersPageNo, selectUsersResMessage } from '../../../Store/user/user.selector'
+
 export default function GetAllUsers () {
   const { enqueueSnackbar } = useSnackbar()
 
   const token = localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME)
   const dispatch = useDispatch()
-  // const { sendRequest: chnageStatusRequest, data: userStatusData, status: changeUserStatus } = useHttp(editUser)
 
   const location = useLocation()
 
