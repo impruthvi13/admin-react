@@ -4,14 +4,12 @@ import { Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import Header from '../../../Components/Header'
-import useHttp from '../../../Shared/Hooks/use-http'
-import { showUser } from '../../../Store/Actions/user'
 import { useSnackbar } from 'react-notistack'
 import { useDispatch, useSelector } from 'react-redux'
 import * as yup from 'yup'
 import 'yup-phone'
-import { selectUserError, selectUsersResMessage } from '../../../Store/user/user.selector'
-import { setUserResponseNull, updateUserStart } from '../../../Store/user/user.action'
+import { selectSingleUser, selectUserError, selectUsersResMessage } from '../../../Store/user/user.selector'
+import { setUserResponseNull, showUserStart, updateUserStart } from '../../../Store/user/user.action'
 
 export default function AddNewUser () {
   // const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
@@ -21,12 +19,10 @@ export default function AddNewUser () {
 
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
-  // const { sendRequest, status, error: editUserError, data: editUserData } = useHttp(editUser)
-  const { sendRequest: sendShowUserRequest, status: showUserStatue, data: userData } = useHttp(showUser)
   const userError = useSelector(selectUserError)
   const userResponse = useSelector(selectUsersResMessage)
-  // const [, setUser] = useState({})
-  // const [editUserData, setEditUserDat] = useState({})
+  const user = useSelector(selectSingleUser)
+
   const validateSchemaAddNewUser = yup.object().shape({
     email: yup
       .string()
@@ -57,17 +53,17 @@ export default function AddNewUser () {
   }
 
   useEffect(() => {
-    sendShowUserRequest({ token, id })
+    dispatch(showUserStart({ token, id }))
   }, [])
 
   useEffect(() => {
-    if (showUserStatue === 'completed') {
-      setValue('first_name', userData?.data?.first_name)
-      setValue('last_name', userData?.data?.last_name)
-      setValue('email', userData?.data?.email)
-      setValue('contact_no', userData?.data?.contact_no)
+    if (user && user != null) {
+      setValue('first_name', user.first_name)
+      setValue('last_name', user.last_name)
+      setValue('email', user.email)
+      setValue('contact_no', user.contact_no)
     }
-  }, [showUserStatue])
+  }, [user])
 
   useEffect(() => {
     if (userResponse && userResponse != null) {

@@ -2,10 +2,10 @@ import { takeLatest, call, all, put } from 'redux-saga/effects'
 
 import {
   addUserSuccess,
-  fetchUserFailed, fetchUserStatusSuccess, fetchUserSuccess, updateUserFailed, updateUserSuccess
+  fetchUserFailed, fetchUserStatusSuccess, fetchUserSuccess, showUserSuccess, updateUserFailed, updateUserSuccess
 } from './user.action'
 import { USER_ACTION_TYPES } from './user.types'
-import { addUser, editUser, getUsers } from '../Actions/user'
+import { addUser, editUser, getUsers, showUser } from '../Actions/user'
 // import { getUsers } from '../Actions/user'
 
 export function * fetchUsersAsync (action) {
@@ -44,6 +44,15 @@ export function * updateUserAsync (action) {
   }
 }
 
+export function * showUserAsync (action) {
+  try {
+    const user = yield call(showUser, action.payload)
+    yield put(showUserSuccess(user))
+  } catch (error) {
+    yield put(updateUserFailed(error))
+  }
+}
+
 export function * onFetchUsers () {
   yield takeLatest(USER_ACTION_TYPES.FETCH_USER_START, fetchUsersAsync)
 }
@@ -60,6 +69,10 @@ export function * onUpdateUser () {
   yield takeLatest(USER_ACTION_TYPES.UPDATE_USER_START, updateUserAsync)
 }
 
+export function * onShowUser () {
+  yield takeLatest(USER_ACTION_TYPES.SHOW_USER_START, showUserAsync)
+}
+
 export function * userSagas () {
-  yield all([call(onFetchUsers), call(onChangeUserStatus), call(onAddUser), call(onUpdateUser)])
+  yield all([call(onFetchUsers), call(onChangeUserStatus), call(onAddUser), call(onUpdateUser), call(onShowUser)])
 }

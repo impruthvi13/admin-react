@@ -11,7 +11,8 @@ const INITIAL_USER = {
   resMessage: null,
   pageNo: 1,
   isLoading: false,
-  error: null
+  error: null,
+  user: null
 }
 
 export const userReducer = (state = INITIAL_USER, action) => {
@@ -61,6 +62,14 @@ export const userReducer = (state = INITIAL_USER, action) => {
         resMessage: payload?.meta?.message,
         isLoading: false
       }
+    case USER_ACTION_TYPES.SHOW_USER_START:
+      return { ...state, isLoading: true }
+    case USER_ACTION_TYPES.SHOW_USER_SUCCESS:
+        return {
+          ...state,
+          isLoading: false,
+          user: payload.data
+        }
     default:
       return state
   }
