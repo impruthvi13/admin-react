@@ -5,12 +5,11 @@ import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import AuthLeftLogo from '../../../Components/AuthLeftLogo'
 import * as yup from 'yup'
-import useHttp from '../../../Shared/Hooks/use-http'
-import { signUpUser } from '../../../Store/Actions/auth'
+// import { signUpUser } from '../../../Store/Actions/auth'
 import { useSnackbar } from 'react-notistack'
 
 function SignUp () {
-  const { sendRequest, status, error: signupError } = useHttp(signUpUser)
+  // const { sendRequest, status, error: signupError } = useHttp(signUpUser)
   const adminValidationSchema = yup.object().shape({
     email: yup
       .string()
@@ -49,7 +48,7 @@ function SignUp () {
       navigate('/admin/login')
     }
     if (status === 'error') {
-      enqueueSnackbar(signupError, {
+      enqueueSnackbar('signupError', {
         variant: 'error',
         autoHide: true,
         hide: 3000,
@@ -79,7 +78,7 @@ function SignUp () {
   }
 
   const onSubmit = async (data) => {
-    sendRequest(data)
+    // sendRequest(data)
   }
   return (
     <>

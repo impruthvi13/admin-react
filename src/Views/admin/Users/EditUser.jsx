@@ -4,26 +4,27 @@ import { Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import Header from '../../../Components/Header'
-import useHttp from '../../../Shared/Hooks/use-http'
-import { editUser, showUser } from '../../../Store/Actions/user'
 import { useSnackbar } from 'react-notistack'
-import { useDispatch } from 'react-redux'
-import { userActions } from '../../../Store/Slices/user'
+import { useDispatch, useSelector } from 'react-redux'
 import * as yup from 'yup'
 import 'yup-phone'
+import { selectSingleUser, selectUserError, selectUsersResMessage } from '../../../Store/user/user.selector'
+import { setUserResponseNull, showUserStart, updateUserStart } from '../../../Store/user/user.action'
+import { selectToken } from '../../../Store/auth/auth.selector'
 
 export default function AddNewUser () {
   // const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
   const { id } = useParams()
-  const token = localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME)
+  const token = useSelector(selectToken)
+
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
-  const { sendRequest, status, error: editUserError, data: editUserData } = useHttp(editUser)
-  const { sendRequest: sendShowUserRequest, status: showUserStatue, data: userData } = useHttp(showUser)
-  // const [, setUser] = useState({})
-  // const [editUserData, setEditUserDat] = useState({})
+  const userError = useSelector(selectUserError)
+  const userResponse = useSelector(selectUsersResMessage)
+  const user = useSelector(selectSingleUser)
+
   const validateSchemaAddNewUser = yup.object().shape({
     email: yup
       .string()
@@ -50,36 +51,36 @@ export default function AddNewUser () {
   })
 
   const onSubmit = (data) => {
-    sendRequest({ data, token, id })
+    dispatch(updateUserStart({ data, token, id }))
   }
 
   useEffect(() => {
-    sendShowUserRequest({ token, id })
+    dispatch(showUserStart({ token, id }))
   }, [])
 
   useEffect(() => {
-    if (showUserStatue === 'completed') {
-      setValue('first_name', userData?.data?.first_name)
-      setValue('last_name', userData?.data?.last_name)
-      setValue('email', userData?.data?.email)
-      setValue('contact_no', userData?.data?.contact_no)
+    if (user && user != null) {
+      setValue('first_name', user.first_name)
+      setValue('last_name', user.last_name)
+      setValue('email', user.email)
+      setValue('contact_no', user.contact_no)
     }
-  }, [showUserStatue])
+  }, [user])
 
   useEffect(() => {
-    if (status === 'completed') {
+    if (userResponse && userResponse != null) {
       navigate('/admin/users')
-      dispatch(userActions.setResponseMessage(editUserData?.meta?.message))
     }
-    if (status === 'error') {
-      enqueueSnackbar(editUserError, {
+    if (userError && userError != null) {
+      enqueueSnackbar(userError, {
         variant: 'error',
         autoHide: true,
         hide: 3000,
         TransitionComponent: 'Fade'
       })
+      dispatch(setUserResponseNull())
     }
-  }, [status, navigator])
+  }, [userError, userResponse])
 
 return (
     <>

@@ -3,36 +3,32 @@ import React, { useEffect, useState } from 'react'
 /* React Packages */
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
-// import { useSelector } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
-// import { Spinner } from 'react-bootstrap'
-// import { useSnackbar } from 'react-notistack'
+import { Spinner } from 'react-bootstrap'
 import Select from 'react-select'
 import orderup from '../../../assets/images/order-up.svg'
 import orderdown from '../../../assets/images/order-down.svg'
 import orderdefault from '../../../assets/images/order-default.svg'
+import { useSnackbar } from 'react-notistack'
 
 /* Components */
 import Header from '../../../Components/Header'
 import TitleHeader from '../../../Components/TitleHeader'
-// import DeleteModal from '../../../Components/DeleteModal'
-
-/* Action File */
 import DeleteModal from '../../../Components/DeleteModal/DeleteModal'
 import ActiveButton from '../../../Shared/Component/ActiveButton'
-import { editUser, getUsers } from '../../../Store/Actions/user'
-import useHttp from '../../../Shared/Hooks/use-http'
-import { Spinner } from 'react-bootstrap'
+
+/* Action File */
 import { useDispatch, useSelector } from 'react-redux'
-import { userActions } from '../../../Store/Slices/user'
-import { useSnackbar } from 'react-notistack'
+import { changeUserStatusStart, fetchUserStart, setUserResponseNull } from '../../../Store/user/user.action'
+import { selectAllUsers, selectUserIsLoading, selectUsersCount, selectUsersLimit, selectUsersOffset, selectUsersPageNo, selectUsersResMessage } from '../../../Store/user/user.selector'
+import { selectToken } from '../../../Store/auth/auth.selector'
+
 export default function GetAllUsers () {
   const { enqueueSnackbar } = useSnackbar()
 
-  const token = localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME)
+  const token = useSelector(selectToken)
+
   const dispatch = useDispatch()
-  const { sendRequest, data: userData, status: getUserStatus } = useHttp(getUsers, true)
-  const { sendRequest: chnageStatusRequest, data: userStatusData, status: changeUserStatus } = useHttp(editUser)
 
   const location = useLocation()
 
@@ -52,35 +48,16 @@ export default function GetAllUsers () {
 //   const [id, setId] = useState('')
 
   // useSelector
-  // const isCouponDeleted = useSelector(state => state.CoupenCodesAdmin.isCouponDeleted)
-  const users = useSelector(state => state.user.users)
-  const usersCount = useSelector(state => state.user.usersCount)
-  const offset = useSelector(state => state.user.offset)
-  const limit = useSelector(state => state.user.limit)
-  const pageNo = useSelector(state => state.user.pageNo)
-  const resMessage = useSelector(state => state.user.resMessage)
-  // const resMessage = useSelector(state => state.CoupenCodesAdmin.resMessage)
+  const users = useSelector(selectAllUsers)
+  const usersCount = useSelector(selectUsersCount)
+  const offset = useSelector(selectUsersOffset)
+  const limit = useSelector(selectUsersLimit)
+  const pageNo = useSelector(selectUsersPageNo)
+  const resMessage = useSelector(selectUsersResMessage)
 
   useEffect(() => {
-    sendRequest({ offset, limit, token })
+    dispatch(fetchUserStart({ offset, limit, token }))
   }, [offset, limit])
-
-  useEffect(() => {
-    if (getUserStatus === 'completed') {
-      dispatch(userActions.allUsers(userData))
-    }
-  }, [dispatch, userData])
-
-  useEffect(() => {
-    if (changeUserStatus === 'completed') {
-      enqueueSnackbar(userStatusData?.meta?.message, {
-        variant: 'success',
-        autoHide: true,
-        hide: 3000,
-        TransitionComponent: 'Fade'
-      })
-    }
-  }, [changeUserStatus])
 
   useEffect(() => {
     if (resMessage && resMessage !== null) {
@@ -90,7 +67,7 @@ export default function GetAllUsers () {
         hide: 3000,
         TransitionComponent: 'Fade'
       })
-      dispatch(userActions.setResponseMessageNull())
+      dispatch(setUserResponseNull())
     }
   }, [resMessage])
 
@@ -99,10 +76,7 @@ export default function GetAllUsers () {
   }
 
   // Function to delete Row in table
-  const handleShow = id => {
-    // setId(1f194_squaredid)
-    setShow(true)
-  }
+  const handleShow = () => setShow(true)
   const handleClose = () => setShow(false)
   const handleDelete = () => {
   }
@@ -136,12 +110,11 @@ export default function GetAllUsers () {
       action: 'change_status'
     }
 
-    chnageStatusRequest({ data, id, token })
-
     const allUsers = [...users]
     const statusUser = allUsers[index]
     const obj = { ...statusUser, active: e.target.checked ? 'y' : 'n' }
-    dispatch(userActions.updateUserStatus({ index, obj }))
+    allUsers[index] = obj
+    dispatch(changeUserStatusStart({ users: allUsers, data, token, id }))
   }
 
   // Search
@@ -217,12 +190,12 @@ export default function GetAllUsers () {
 
   // Pagination
   const onPageChange = (pageNo) => {
-    dispatch(userActions.allUsers({ limit, offset: limit * (pageNo - 1), pageNo }))
+    dispatch(fetchUserStart({ limit, offset: limit * (pageNo - 1), pageNo, token }))
   }
 
   // pagePerLimit
   const handlePagePerLimit = (e) => {
-    dispatch(userActions.allUsers({ limit: e.value, offset, pageNo }))
+    dispatch(fetchUserStart({ limit: e.value, offset, pageNo, token }))
   }
 
   const options = {
@@ -356,7 +329,7 @@ export default function GetAllUsers () {
             options={options}
             defaultSorted={defaultSortedBy}
             onTableChange={handleTablechange}
-            noDataIndication={ () => getUserStatus === 'pending' ? <Spinner className='text-center' animation='border' /> : 'No data' }
+            noDataIndication={ () => selectUserIsLoading ? <Spinner className='text-center' animation='border' /> : 'No data' }
           />
         </div>
       </div>
