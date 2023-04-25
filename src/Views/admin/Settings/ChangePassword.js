@@ -1,16 +1,12 @@
-// import React, { useState, useRef, useEffect } from 'react'
 import React, { useEffect, useState } from 'react'
 import { Form } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-// import { useDispatch, useSelector } from 'react-redux'
 import Header from '../../../Components/Header'
-// import ls from 'localstorage-slim'
-// import localStorage from 'react-secure-storage'
-import useHttp from '../../../Shared/Hooks/use-http'
-import { changeAdminPassword } from '../../../Store/Actions/auth'
-// import { Navigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { changePasswordStart, setResponseNull } from '../../../Store/auth/auth.action'
+import { selectAuthResponse, selectIsAuthError, selectToken } from '../../../Store/auth/auth.selector'
 import { useSnackbar } from 'react-notistack'
 // Regex for password
 const passRegex =
@@ -43,25 +39,56 @@ const validationSchema = yup.object().shape({
 })
 
 function ChangePassword () {
-  const { sendRequest, status, error: signupError } = useHttp(changeAdminPassword)
-  const token = localStorage.getItem('token')
-  const { enqueueSnackbar } = useSnackbar()
+  const token = useSelector(selectToken)
   const [type, setType] = useState('password')
+  const dispatch = useDispatch()
   const [isShowPassword, setShowPassword] = useState(false)
+  const { enqueueSnackbar } = useSnackbar()
+  const authResponse = useSelector(selectAuthResponse)
+  const authError = useSelector(selectIsAuthError)
+
   // useForm
   const {
     register,
     handleSubmit,
-    formState: { errors }
-    // reset
+    formState: { errors },
+    reset
   } = useForm({
     resolver: yupResolver(validationSchema)
   })
+
+  useEffect(() => {
+    if (authResponse && authResponse !== null) {
+      enqueueSnackbar(authResponse, {
+        variant: 'success',
+        autoHide: true,
+        hide: 3000,
+        TransitionComponent: 'Fade'
+      })
+      reset()
+      dispatch(setResponseNull())
+    }
+  }, [authResponse])
+
+  useEffect(() => {
+    if (authError && authError !== null) {
+      enqueueSnackbar(authError, {
+        variant: 'error',
+        autoHide: true,
+        hide: 3000,
+        TransitionComponent: 'Fade'
+      })
+      reset()
+      dispatch(setResponseNull())
+    }
+  }, [authError])
+
   const { onChange, name } = register('password', 'password_confirmation')
 
   // Submit Method
   const onSubmit = (data) => {
-    sendRequest({ token, data })
+    // sendRequest({ token, data })
+    dispatch(changePasswordStart({ token, data }))
   }
 
   // Handle method show/hide password
@@ -74,20 +101,6 @@ function ChangePassword () {
       setShowPassword(false)
     }
   }
-
-  useEffect(() => {
-    if (status === 'completed') {
-      // sucess notification code
-    }
-    if (status === 'error') {
-      enqueueSnackbar(signupError, {
-        variant: 'error',
-        autoHide: true,
-        hide: 3000,
-        TransitionComponent: 'Fade'
-      })
-    }
-  }, [status, navigator])
 
   return (
     <>

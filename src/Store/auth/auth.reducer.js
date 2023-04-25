@@ -28,8 +28,22 @@ export const authReducer = (state = INITIAL_AUTH, action) => {
       }
     case AUTH_ACTION_TYPES.LOGIN_USER_START_FAILED:
       return { ...state, isLoading: false, authError: payload?.response?.data?.meta?.message }
+    case AUTH_ACTION_TYPES.CHANGE_PASSWORD_START:
+      return {
+        ...state,
+        isLoading: true
+      }
+    case AUTH_ACTION_TYPES.CHANGE_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        authResponse: payload?.data?.meta?.message
+      }
+
     case AUTH_ACTION_TYPES.SET_RESPONSE_NULL:
-        return { ...state, isLoading: false, authError: null }
+        return { ...state, isLoading: false, authError: null, authResponse: null }
+    case AUTH_ACTION_TYPES.CHANGE_PASSWORD_FAILED:
+      return { ...state, isLoading: false, authError: payload?.response?.data?.meta?.message }
     default:
       return state
   }
