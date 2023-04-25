@@ -9,9 +9,11 @@ import * as yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
 import { addUserStart, setUserResponseNull } from '../../../Store/user/user.action'
 import { selectUserError, selectUsersResMessage } from '../../../Store/user/user.selector'
+import { selectToken } from '../../../Store/auth/auth.selector'
 
 export default function AddNewUser () {
-  const token = localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME)
+  const token = useSelector(selectToken)
+
   const dispatch = useDispatch()
 
   const userError = useSelector(selectUserError)

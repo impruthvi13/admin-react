@@ -21,11 +21,13 @@ import ActiveButton from '../../../Shared/Component/ActiveButton'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeUserStatusStart, fetchUserStart, setUserResponseNull } from '../../../Store/user/user.action'
 import { selectAllUsers, selectUserIsLoading, selectUsersCount, selectUsersLimit, selectUsersOffset, selectUsersPageNo, selectUsersResMessage } from '../../../Store/user/user.selector'
+import { selectToken } from '../../../Store/auth/auth.selector'
 
 export default function GetAllUsers () {
   const { enqueueSnackbar } = useSnackbar()
 
-  const token = localStorage.getItem(process.env.REACT_APP_AUTH_TOKEN_NAME)
+  const token = useSelector(selectToken)
+
   const dispatch = useDispatch()
 
   const location = useLocation()
