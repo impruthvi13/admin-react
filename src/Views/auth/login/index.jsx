@@ -5,13 +5,13 @@ import * as yup from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Link, useNavigate } from 'react-router-dom'
-import ls from 'localstorage-slim'
 
 // Components
 import Language from '../../../Components/Language'
 import AuthLeftLogo from '../../../Components/AuthLeftLogo'
-import useHttp from '../../../Shared/Hooks/use-http'
-import { loginUser } from '../../../Store/Actions/auth'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginUserStart, setResponseNull } from '../../../Store/auth/auth.action'
+import { selectAuth, selectIsAuthError, selectIsAuthenticated, selectToken } from '../../../Store/auth/auth.selector'
 
 // Validation-Scheme for fields
 const adminValidationSchema = yup.object().shape({
@@ -33,29 +33,43 @@ function Login () {
   const [isShowPassword, setShowPassword] = useState(false)
   const [disable] = useState(false)
   const [type, setType] = useState('password')
-  const { sendRequest, status, error: loginError, data } = useHttp(loginUser)
+  const auth = useSelector(selectAuth)
+  const isAuthenticated = useSelector(selectIsAuthenticated)
+  // const isLoading = useSelector(selectIsLoading)
+  const token = useSelector(selectToken)
+  const authError = useSelector(selectIsAuthError)
+  // const authResponse = useSelector(selectAuthResponse)
+
   const { enqueueSnackbar } = useSnackbar()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (status === 'completed') {
-      localStorage.setItem(process.env.REACT_APP_AUTH_TOKEN_NAME, data.headers['x-authorization-token'])
-      ls.set(process.env.REACT_APP_AUTH_USER, data.data.data, {
-        encrypt: true,
-        secret: +process.env.REACT_APP_LOCAL_STORAGE_ENCRYPT
-      })
-      // localStorage.setItem(process.env.REACT_APP_AUTH_USER, JSON.stringify(data.data.data))
+    if (
+      authError == null &&
+      isAuthenticated &&
+      isAuthenticated === true &&
+      token &&
+      token !== null &&
+      auth &&
+      auth !== null
+    ) {
       navigate('/admin/dashboard')
     }
-    if (status === 'error') {
-      enqueueSnackbar(loginError, {
+  }, [authError, isAuthenticated, token, auth])
+
+  useEffect(() => {
+    console.log(authError)
+    if (authError && authError != null) {
+      enqueueSnackbar(authError, {
         variant: 'error',
         autoHide: true,
         hide: 3000,
         TransitionComponent: 'Fade'
       })
+      dispatch(setResponseNull())
     }
-  }, [status, navigator])
+  }, [authError])
 
   const {
     register,
@@ -76,9 +90,7 @@ function Login () {
       setShowPassword(false)
     }
   }
-  const onSubmit = async (data) => {
-    sendRequest(data)
-  }
+  const onSubmit = async (data) => dispatch(loginUserStart(data))
 
   return (
     <>
