@@ -22,5 +22,12 @@ export const getLoggedInDetailsSuccess = (user) =>
 export const getLoggedInDetailsFailed = (error) =>
   createAction(AUTH_ACTION_TYPES.GET_LOGGED_IN_DETAILS_FAILED, error)
 
+export const editProfileStart = (payload) =>
+  createAction(AUTH_ACTION_TYPES.EDIT_PROFILE_START, payload)
+export const editProfileSuccess = (user) =>
+  createAction(AUTH_ACTION_TYPES.EDIT_PROFILE_SUCCESS, user)
+export const editProfileFailed = (error) =>
+  createAction(AUTH_ACTION_TYPES.EDIT_PROFILE_FAILED, error)
+
 export const setResponseNull = () =>
   createAction(AUTH_ACTION_TYPES.SET_RESPONSE_NULL)

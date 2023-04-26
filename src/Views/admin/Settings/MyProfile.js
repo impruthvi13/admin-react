@@ -35,17 +35,17 @@ function AdminProfile () {
                       <div className="col-xl-8">
                         <div className="profileinfo profile-updated">
                           <div className="profile-img">
-                            <img src={profileData?.profile ? `${profileData?.profile}` : defaultimage} alt="ollato-img" />
+                            <img src={profileData?.profile ? `${profileData?.profile}` : defaultimage} alt="img" />
                           </div>
                           <div className="profiledesc">
                             <h4>{profileData?.full_name}</h4>
                             <ul className="iconbox">
                               <li>
-                                <img src={mail} alt="ollato-img" />
+                                <img src={mail} alt="img" />
                                 <p>{profileData?.email} </p>
                               </li>
                               <li>
-                                <img src={phone} alt="ollato-img" />
+                                <img src={phone} alt="img" />
                                 <p>{profileData?.contact_no} </p>
                               </li>
                             </ul>

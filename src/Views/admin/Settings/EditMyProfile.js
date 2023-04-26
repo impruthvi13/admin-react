@@ -1,53 +1,43 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import TitleHeader from '../../../Components/TitleHeader'
 import * as yup from 'yup'
 import { useNavigate } from 'react-router-dom'
 import { Form } from 'react-bootstrap'
-// import { useSnackbar } from 'react-notistack'
+import defaultimage from '../../../assets/images/default.jpeg'
+
+import { useSnackbar } from 'react-notistack'
 // import { useDispatch, useSelector } from 'react-redux'
 // import { editProfileAdmin, viewProfileAdmin } from '../../../Actions/auth'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import crossWhite from '../../../assets/images/crosswhite.svg'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectAuth, selectAuthResponse, selectIsAuthError, selectToken } from '../../../Store/auth/auth.selector'
+import { editProfileStart, getLoggedInDetailsStart, setResponseNull } from '../../../Store/auth/auth.action'
 // import defaultimage from '../../../assets/images/default.jpeg'
 function EditmyprofileAdmin () {
-  // const token = localStorage.getItem('token')
   const navigate = useNavigate()
-  // const dispatch = useDispatch()
-  // const { enqueueSnackbar } = useSnackbar()
+  const { enqueueSnackbar } = useSnackbar()
   const [selectedImage, setSelectedFile] = useState()
-  // const profileData = useSelector((state) => state.auth.profileDataAdmin)
-  // const isProfileEditedAdmin = useSelector(
-  //   (state) => state.auth.isProfileEditedAdmin
-  // )
-  // const resMessageFlag = useSelector((state) => state.auth.resMessage)
-  // const previousProps = useRef({ isProfileEditedAdmin }).current
 
-  // useEffect(() => {
-  //   dispatch(viewProfileAdmin(token))
-  // }, [])
+  const dispatch = useDispatch()
 
-  // useEffect(() => {
-  //   localStorage.setItem('profile', JSON.stringify(profileData))
-  // }, [profileData])
+  const profileData = useSelector(selectAuth)
+  const token = useSelector(selectToken)
+  const authResponse = useSelector(selectAuthResponse)
+  const authError = useSelector(selectIsAuthError)
 
   const validationSchema = yup.object().shape({
-    firstname: yup
+    full_name: yup
       .string()
-      .required('First Name is required')
-      .min(2, 'First Name must be at least 2 characters')
-      .max(20, 'First Name must be at most 20 characters')
+      .required('Full Name is required')
+      .min(2, 'Full Name must be at least 2 characters')
+      .max(20, 'Full Name must be at most 20 characters')
       .matches(/^[a-zA-z]+([\s][a-zA-Z]+)*$/, 'Special Characters & Numeric value are not allowed'),
-    lastname: yup
+    contact_no: yup
       .string()
-      .required('Last Name is required')
-      .min(2, 'Last Name must be at least 2 characters')
-      .max(20, 'Last Name must be at most 20 characters')
-      .matches(/^[a-zA-z]+([\s][a-zA-Z]+)*$/, 'Special Characters & Numeric value are not allowed'),
-    mobileNumber: yup
-      .string()
-      .required('Mobile Number is required')
-      .matches(/^(\+\d{1,3}[- ]?)?\d{10}$/, 'Enter valid Mobile Number'),
+      .required('Contact Number is required')
+      .matches(/^(\+\d{1,3}[- ]?)?\d{10}$/, 'Enter valid Contact Number'),
     email: yup
       .string()
       .required('Email is required')
@@ -57,49 +47,52 @@ function EditmyprofileAdmin () {
   const {
     register,
     handleSubmit,
-    formState: { errors }
-    // reset
+    formState: { errors },
+    reset
   } = useForm({
     resolver: yupResolver(validationSchema)
   })
   const { onChange } = register()
 
-  // useEffect(() => {
-  //   if (previousProps?.isProfileEditedAdmin !== isProfileEditedAdmin) {
-  //     if (isProfileEditedAdmin === true) {
-  //       dispatch(viewProfileAdmin(token))
-  //       // localStorage.setItem('profile', profileData)
-  //       enqueueSnackbar(`${resMessageFlag}`, {
-  //         variant: 'success',
-  //         autoHide: true,
-  //         hide: 2000
-  //       })
-  //       navigate('/admin/settings/myprofile')
-  //     } else if (isProfileEditedAdmin === false) {
-  //       enqueueSnackbar(`${resMessageFlag}`, {
-  //         variant: 'error',
-  //         autoHide: true,
-  //         hide: 2000
-  //       })
-  //     }
-  //   }
-  //   return () => {
-  //     previousProps.isProfileEditedAdmin = isProfileEditedAdmin
-  //   }
-  // }, [isProfileEditedAdmin])
+  useEffect(() => {
+      dispatch(getLoggedInDetailsStart(token))
+      reset({
+        full_name: profileData?.full_name,
+        email: profileData?.email,
+        contact_no: profileData?.contact_no
+      })
+      setSelectedFile(profileData?.profile)
+  }, [])
 
-  // useEffect(() => {
-  //   if (profileData) {
-  //     setSelectedFile(profileData?.profile_pic)
-  //     reset({
-  //       firstname: profileData?.first_name,
-  //       lastname: profileData?.last_name,
-  //       email: profileData?.email,
-  //       mobileNumber: profileData?.mobile,
-  //       username: profileData?.user_name
-  //     })
-  //   }
-  // }, [profileData])
+  useEffect(() => {
+    if (authResponse && authResponse !== null) {
+      enqueueSnackbar(authResponse, {
+        variant: 'success',
+        autoHide: true,
+        hide: 3000,
+        TransitionComponent: 'Fade'
+      })
+      reset({
+        full_name: profileData?.full_name,
+        email: profileData?.email,
+        contact_no: profileData?.contact_no
+      })
+      dispatch(setResponseNull())
+    }
+  }, [authResponse])
+
+  useEffect(() => {
+    if (authError && authError !== null) {
+      enqueueSnackbar(authError, {
+        variant: 'error',
+        autoHide: true,
+        hide: 3000,
+        TransitionComponent: 'Fade'
+      })
+      reset()
+      dispatch(setResponseNull())
+    }
+  }, [authError])
 
   const removeImage = (e) => {
     e.preventDefault()
@@ -108,21 +101,16 @@ function EditmyprofileAdmin () {
 
   const onSubmit = (data) => {
     const formData = new FormData()
-    formData.append('first_name', data?.firstname)
-    formData.append('last_name', data?.lastname)
+    formData.append('full_name', data?.full_name)
     formData.append('email', data?.email)
-    formData.append('mobile', data?.mobileNumber)
+    formData.append('contact_no', data?.contact_no)
     if (selectedImage !== null) {
       formData.append(
-        'profile'
-        // data?.files[0] ? data?.files[0] : profileData?.profile_pic
+        'profile',
+        data?.files[0] ? data?.files[0] : profileData?.profile
       )
     }
-
-    // }
-    // if (formData) {
-    //   dispatch(editProfileAdmin(formData, token))
-    // }
+    dispatch(editProfileStart({ formData, token }))
   }
 
   return (
@@ -164,18 +152,16 @@ function EditmyprofileAdmin () {
                     />
                     <div className='form-control d-flex align-items-center flex-column justify-content-center text-center '>
                       <div className='img-box'>
-                        {/* {selectedImage
-                            ? ( */}
                         <img
-                          // src={
-                          //   selectedImage === null
-                          //     ? defaultimage
-                          //     : typeof selectedImage === 'string'
-                          //       ? `${process.env.REACT_APP_AXIOS_BASE_URL}${profileData?.profile_pic}`
-                          //       : typeof selectedImage === 'object'
-                          //         ? URL.createObjectURL(selectedImage)
-                          //         : null
-                          // }
+                          src={
+                            selectedImage === null
+                              ? defaultimage
+                              : typeof selectedImage === 'string'
+                                ? selectedImage
+                                : typeof selectedImage === 'object'
+                                  ? URL.createObjectURL(selectedImage)
+                                  : null
+                          }
                           alt=''
                         />
                       </div>
@@ -198,79 +184,40 @@ function EditmyprofileAdmin () {
                   <div className='col-lg-6'>
                     <Form.Group
                       className={`form-group ${
-                        errors.firstname?.message ? 'error-occured' : ''
+                        errors.full_name?.message ? 'error-occured' : ''
                       }`}
-                      controlId='firstname'
+                      controlId='full_name'
                     >
-                      <Form.Label>First Name</Form.Label>
+                      <Form.Label>Full Name</Form.Label>
                       <Form.Control
-                        placeholder='Enter firstname'
+                        placeholder='Enter Full Name'
                         type='text'
-                        {...register('firstname', { required: true })}
+                        {...register('full_name', { required: true })}
                       />
-                      {errors.firstname?.message && (
+                      {errors.full_name?.message && (
                         <Form.Text className='error-msg'>
-                          {errors.firstname?.message}
+                          {errors.full_name?.message}
                         </Form.Text>
                       )}
                     </Form.Group>
                   </div>
-                  <div className='col-lg-6'>
-                    <Form.Group
-                      className={`form-group ${
-                        errors.lastname?.message ? 'error-occured' : ''
-                      }`}
-                      controlId='lastname'
-                    >
-                      <Form.Label>Last Name</Form.Label>
-                      <Form.Control
-                        placeholder='Enter lastname'
-                        type='text'
-                        {...register('lastname', { required: true })}
-                      />
-                      {errors.lastname?.message && (
-                        <Form.Text className='error-msg'>
-                          {errors.lastname?.message}
-                        </Form.Text>
-                      )}
-                    </Form.Group>
-                  </div>
-                  <div className='col-lg-6'>
-                    <Form.Group
-                      className={`form-group ${
-                        errors.username?.message ? 'error-occured' : ''
-                      }`}
-                      controlId='username'
-                    >
-                      <Form.Label>User Name</Form.Label>
-                      <Form.Control
-                        placeholder='Enter username'
-                        type='text'
-                        {...register('username', { required: true })}
-                      />
-                      {errors.username?.message && (
-                        <Form.Text className='error-msg'>
-                          {errors.username?.message}
-                        </Form.Text>
-                      )}
-                    </Form.Group>
-                  </div>
+
                   <div className='col-lg-6'>
                     <Form.Group
                       controlId='formBasicEmail'
                       className={`form-group ${
-                        errors.mobileNumber?.message ? 'error-occured' : ''
+                        errors.contact_no?.message ? 'error-occured' : ''
                       }`}
                     >
-                      <Form.Label>Mobile Number</Form.Label>
+                      <Form.Label>Contact Number</Form.Label>
                       <Form.Control
-                        placeholder='Enter Mobile Number'
+                        placeholder='Enter Contact Number'
                         type='text'
-                        {...register('mobileNumber', { required: true })}
+                        {...register('contact_no', { required: true })}
                       />
-                      {errors.mobileNumber?.message && (
+                      {errors.contact_no?.message && (
                         <Form.Text className='error-msg'>
-                          {errors.mobileNumber?.message}{' '}
+                          {errors.contact_no?.message}{' '}
                         </Form.Text>
                       )}
                     </Form.Group>

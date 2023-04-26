@@ -62,11 +62,36 @@ export const authReducer = (state = INITIAL_AUTH, action) => {
         ...state,
         isLoading: true
       }
-      case AUTH_ACTION_TYPES.GET_LOGGED_IN_DETAILS_SUCCESS:
+    case AUTH_ACTION_TYPES.GET_LOGGED_IN_DETAILS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        auth: payload?.data?.data
+      }
+    case AUTH_ACTION_TYPES.GET_LOGGED_IN_DETAILS_FAILED:
+      return {
+        ...state,
+        isLoading: false,
+        authError: payload?.response?.data?.meta?.message
+      }
+
+      case AUTH_ACTION_TYPES.EDIT_PROFILE_START:
+        return {
+          ...state,
+          isLoading: true
+        }
+      case AUTH_ACTION_TYPES.EDIT_PROFILE_SUCCESS:
         return {
           ...state,
           isLoading: false,
-          auth: payload?.data?.data
+          auth: payload?.data?.data,
+          authResponse: payload?.data?.meta?.message
+        }
+      case AUTH_ACTION_TYPES.EDIT_PROFILE_FAILED:
+        return {
+          ...state,
+          isLoading: false,
+          authError: payload?.response?.data?.meta?.message
         }
     default:
       return state
