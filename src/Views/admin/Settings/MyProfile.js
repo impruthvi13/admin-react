@@ -1,23 +1,22 @@
-import React from 'react'
-import ls from 'localstorage-slim'
+import React, { useEffect } from 'react'
 /* Components */
 import { Link } from 'react-router-dom'
 import defaultimage from '../../../assets/images/default.jpeg'
 import mail from '../../../assets/images/mail.svg'
 import phone from '../../../assets/images/phone.svg'
-// import { viewProfileAdmin } from '../../../Actions/auth'
-// import { useDispatch, useSelector } from 'react-redux'
+import { selectAuth, selectToken } from '../../../Store/auth/auth.selector'
+import { useDispatch, useSelector } from 'react-redux'
+import { getLoggedInDetailsStart } from '../../../Store/auth/auth.action'
 
 function AdminProfile () {
-  // const token = localStorage.getItem('token')
-  // const dispatch = useDispatch()
-  const profileData = ls.get(process.env.REACT_APP_AUTH_USER, {
-    decrypt: true,
-    secret: process.env.REACT_APP_LOCAL_STORAGE_ENCRYPT
-  })
-  // useEffect(() => {
-  //   dispatch(viewProfileAdmin(token))
-  // }, [])
+  const dispatch = useDispatch()
+
+  const profileData = useSelector(selectAuth)
+  const token = useSelector(selectToken)
+
+  useEffect(() => {
+    dispatch(getLoggedInDetailsStart(token))
+  }, [])
 
   return (
     <>
