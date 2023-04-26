@@ -15,54 +15,15 @@ import dashboard from '../../assets/images/sidebar-icons/dashboard.svg'
 
 import closebtn from '../../assets/images/close-circle-mobile.svg'
 import PropTypes from 'prop-types'
-// Action File
-// import { logoutAction } from '../../Actions/auth'
-// import { getCounsellorDataAction } from '../../Actions/Counsellor/dashboard'
-// import ls from 'localstorage-slim'
-// import localStorage from 'react-secure-storage'
-// import { getCounsellorDataAction } from '../../Actions/Counsellor/dashboard'
+import { useDispatch, useSelector } from 'react-redux'
+import { logoutStart } from '../../Store/auth/auth.action'
+import { selectToken } from '../../Store/auth/auth.selector'
 function Sidebar (props) {
-  // const { sendRequest, data: sideBarsData } = useHttp(getAdminSideBar)
+  const token = useSelector(selectToken)
 
-  // const dispatch = useDispatch()
-  // const { enqueueSnackbar } = useSnackbar()
-
-  // localStorage
-  // const roles = JSON.parse(localStorage.getItem('roles'))
-  // const profile = JSON.parse(localStorage.getItem('profile'))
-  // const adminType = ls.get('admin-type', { decrypt: true, secret: profile?.id })
-
-  // useSelector
-  // const data = useSelector((state) => state.auth.isLoggedOut)
-  // const dataMessage = useSelector((state) => state.auth.resMessage)
-  // const profileData = useSelector((state) => state.dashboard.counsellorData)
-  // const previousProps = useRef({ data, dataMessage }).current
-
+  const dispatch = useDispatch()
   const handleLogout = () => {
-    // localStorage.removeItem('token')
-    // // localStorage.setItem('isLogin', '0')
-    // if (adminType === 'super' || adminType === 'sub') {
-    //   // dispatch(logoutAction(token, 'admin'))
-    // } else if (adminType === 'center') {
-    //   // dispatch(logoutAction(token, 'center'))
-    // } else {
-    //   // dispatch(logoutAction(token, 'counsellor'))
-    // }
-    // setTimeout(() => {
-    //   if (
-    //     adminType === 'super' ||
-    //     adminType === 'sub'
-    //   ) {
-    //     navigate('/admin/login')
-    //   } else if (adminType === 'center') {
-    //     navigate('/center/login')
-    //   } else if (adminType === 'counsellor') {
-    //     navigate('/counsellor/login')
-    //   }
-    //   localStorage.removeItem('admin-type')
-    //   localStorage.removeItem('roles')
-    //   localStorage.removeItem('profile')
-    // }, 500)
+    dispatch(logoutStart(token))
   }
   Accordion.defaultProps = {
     open: false
@@ -125,7 +86,7 @@ function Sidebar (props) {
         </div>
         {/* Logout Button */}
         <div className='logout-btn'>
-          <button className='logout menu-link' onClick={handleLogout}>
+          <button type='button' className='logout menu-link' onClick={handleLogout}>
             <div className='icon-box'>
               <img src={logout} alt='logo sidebar' />
             </div>

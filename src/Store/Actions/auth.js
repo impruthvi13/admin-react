@@ -31,3 +31,8 @@ export async function editProfile (userData) {
   const response = await axios.post(API_EDIT_ADMIN_PROFILE_ENDPOINT, formData, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` } })
   return response
 }
+
+export async function logout (token) {
+  await axios.post(API_EDIT_ADMIN_PROFILE_ENDPOINT, null, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` } })
+  return null
+}

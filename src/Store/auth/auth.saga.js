@@ -8,10 +8,12 @@ import {
   getLoggedInDetailsFailed,
   getLoggedInDetailsSuccess,
   loginUserFailed,
-  loginUserSuccess
+  loginUserSuccess,
+  logoutFailed,
+  logoutSuccess
 } from './auth.action'
 import { AUTH_ACTION_TYPES } from './auth.types'
-import { changeAdminPassword, editProfile, getLoginDetails, loginUser } from '../Actions/auth'
+import { changeAdminPassword, editProfile, getLoginDetails, loginUser, logout } from '../Actions/auth'
 
 export function * loginUsersAsync (action) {
   try {
@@ -42,11 +44,19 @@ export function * getLoggedInDetailsAsync (action) {
 
 export function * editProfileAsync (action) {
   try {
-    console.log(action)
     const user = yield call(editProfile, action.payload)
     yield put(editProfileSuccess(user))
   } catch (error) {
     yield put(editProfileFailed(error))
+  }
+}
+
+export function * logoutAsync (action) {
+  try {
+    yield call(logout, action.payload)
+    yield put(logoutSuccess())
+  } catch (error) {
+    yield put(logoutFailed(error))
   }
 }
 
@@ -66,6 +76,10 @@ export function * onEditProfile () {
   yield takeLatest(AUTH_ACTION_TYPES.EDIT_PROFILE_START, editProfileAsync)
 }
 
+export function * onLogout () {
+  yield takeLatest(AUTH_ACTION_TYPES.LOGOUT_START, logoutAsync)
+}
+
 export function * authSagas () {
-  yield all([call(onUserLogin), call(onChangePassword), call(onGetLoggedInDetails), call(onEditProfile)])
+  yield all([call(onUserLogin), call(onChangePassword), call(onGetLoggedInDetails), call(onEditProfile), call(onLogout)])
 }

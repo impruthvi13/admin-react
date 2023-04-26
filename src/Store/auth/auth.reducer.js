@@ -93,6 +93,13 @@ export const authReducer = (state = INITIAL_AUTH, action) => {
           isLoading: false,
           authError: payload?.response?.data?.meta?.message
         }
+      case AUTH_ACTION_TYPES.LOGOUT_START:
+        return {
+          ...state,
+          isLoading: true
+        }
+      case AUTH_ACTION_TYPES.LOGOUT_SUCCESS:
+        return INITIAL_AUTH
     default:
       return state
   }

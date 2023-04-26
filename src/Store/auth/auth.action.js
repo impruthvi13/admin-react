@@ -29,5 +29,12 @@ export const editProfileSuccess = (user) =>
 export const editProfileFailed = (error) =>
   createAction(AUTH_ACTION_TYPES.EDIT_PROFILE_FAILED, error)
 
+export const logoutStart = (payload) =>
+  createAction(AUTH_ACTION_TYPES.LOGOUT_START, payload)
+export const logoutSuccess = (user) =>
+  createAction(AUTH_ACTION_TYPES.LOGOUT_SUCCESS)
+export const logoutFailed = (error) =>
+  createAction(AUTH_ACTION_TYPES.LOGOUT_FAILED, error)
+
 export const setResponseNull = () =>
   createAction(AUTH_ACTION_TYPES.SET_RESPONSE_NULL)
