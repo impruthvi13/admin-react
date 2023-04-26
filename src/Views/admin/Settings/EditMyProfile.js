@@ -123,6 +123,7 @@ function EditmyprofileAdmin () {
               <button
                 className='theme-btn dark-btn text-none'
                 onClick={() => navigate(-1)}
+                type='button'
               >
                 Cancel
               </button>
