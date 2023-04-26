@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { API_CHANGE_ADMIN_PASSWORD_ENDPOINT, API_EDIT_ADMIN_PROFILE_ENDPOINT, API_GET_LOGGED_IN_ADDETAILS_ENDPOINT, API_LOGIN_ENDPOINT, API_SIGNUP_ENDPOINT } from '../../constants/apiEndpoints'
+import { API_CHANGE_ADMIN_PASSWORD_ENDPOINT, API_EDIT_ADMIN_PROFILE_ENDPOINT, API_GET_LOGGED_IN_ADDETAILS_ENDPOINT, API_LOGIN_ENDPOINT, API_LOGOUT_ENDPOINT, API_SIGNUP_ENDPOINT } from '../../constants/apiEndpoints'
 
 export async function loginUser (userData) {
   const response = await axios.post(API_LOGIN_ENDPOINT, userData, { headers: { 'Content-Type': 'application/json', accept: 'application/json' } })
@@ -33,6 +33,6 @@ export async function editProfile (userData) {
 }
 
 export async function logout (token) {
-  await axios.post(API_EDIT_ADMIN_PROFILE_ENDPOINT, null, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` } })
+  await axios.post(API_LOGOUT_ENDPOINT, null, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` } })
   return null
 }
