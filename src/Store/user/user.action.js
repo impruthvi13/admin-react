@@ -48,3 +48,12 @@ export const showUserSuccess = (user) =>
 
 export const showUserFailed = (error) =>
   createAction(USER_ACTION_TYPES.SHOW_USER_FAILED, error)
+
+export const deleteUserStart = (payload) =>
+  createAction(USER_ACTION_TYPES.DELETE_USER_START, payload)
+
+export const deleteUserSuccess = (user) =>
+  createAction(USER_ACTION_TYPES.DELETE_USER_SUCCESS, user)
+
+export const deleteUserFailed = (error) =>
+  createAction(USER_ACTION_TYPES.DELETE_USER_FAILED, error)

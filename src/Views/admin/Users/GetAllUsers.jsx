@@ -19,7 +19,7 @@ import ActiveButton from '../../../Shared/Component/ActiveButton'
 
 /* Action File */
 import { useDispatch, useSelector } from 'react-redux'
-import { changeUserStatusStart, fetchUserStart, setUserResponseNull } from '../../../Store/user/user.action'
+import { changeUserStatusStart, deleteUserStart, fetchUserStart, setUserResponseNull } from '../../../Store/user/user.action'
 import { selectAllUsers, selectUserIsLoading, selectUsersCount, selectUsersLimit, selectUsersOffset, selectUsersPageNo, selectUsersResMessage } from '../../../Store/user/user.selector'
 import { selectToken } from '../../../Store/auth/auth.selector'
 
@@ -41,11 +41,11 @@ export default function GetAllUsers () {
   // useState
   const [show, setShow] = useState(false)
   const [rowArray, setRowArray] = useState([])
+  const [id, setId] = useState('')
   // const [usersArray, setUsersArray] = useState([])
   // const [sort] = useState('title')
   // const [order] = useState('asc')
   // const [search, setSearch] = useState('')
-//   const [id, setId] = useState('')
 
   // useSelector
   const users = useSelector(selectAllUsers)
@@ -76,9 +76,14 @@ export default function GetAllUsers () {
   }
 
   // Function to delete Row in table
-  const handleShow = () => setShow(true)
+  const handleShow = (id) => {
+    setShow(true)
+    setId(id)
+  }
   const handleClose = () => setShow(false)
-  const handleDelete = () => {
+  const handleDelete = (id) => {
+    dispatch(deleteUserStart({ token, id, users }))
+    setShow(false)
   }
   // Multiple row delete
   const selectRow = (row, isSelect) => {
@@ -333,7 +338,7 @@ export default function GetAllUsers () {
           />
         </div>
       </div>
-      <DeleteModal show={show} id={1} handleClose={handleClose} handleDelete={handleDelete} />
+      <DeleteModal show={show} id={id} handleClose={handleClose} handleDelete={handleDelete} />
     </>
   )
 }

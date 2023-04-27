@@ -70,6 +70,12 @@ export const userReducer = (state = INITIAL_USER, action) => {
           isLoading: false,
           user: payload.data
         }
+    case USER_ACTION_TYPES.DELETE_USER_START:
+      return { ...state, isLoading: true }
+    case USER_ACTION_TYPES.DELETE_USER_SUCCESS:
+      return { ...state, isLoading: false, users: payload.users, resMessage: payload?.user?.meta?.message }
+      case USER_ACTION_TYPES.DELETE_USER_FAILED:
+        return { ...state, isLoading: false, error: payload?.response?.data?.meta?.message }
     default:
       return state
   }

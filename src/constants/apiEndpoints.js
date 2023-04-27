@@ -9,3 +9,4 @@ export const API_CHANGE_ADMIN_PASSWORD_ENDPOINT = `${APP_URL}/admin/change-passw
 export const API_EDIT_ADMIN_PROFILE_ENDPOINT = `${APP_URL}/admin/edit-profile`
 export const API_GET_LOGGED_IN_ADDETAILS_ENDPOINT = `${APP_URL}/admin/admin-details`
 export const API_LOGOUT_ENDPOINT = `${APP_URL}/admin/logout`
+export const API_DELETE_USER_ENDPOINT = `${APP_URL}/admin/users`

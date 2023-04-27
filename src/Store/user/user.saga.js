@@ -2,11 +2,18 @@ import { takeLatest, call, all, put } from 'redux-saga/effects'
 
 import {
   addUserSuccess,
-  fetchUserFailed, fetchUserStatusSuccess, fetchUserSuccess, showUserSuccess, updateUserFailed, updateUserSuccess
+  deleteUserFailed,
+  deleteUserSuccess,
+  fetchUserFailed,
+  fetchUserStatusSuccess,
+  fetchUserSuccess,
+  showUserFailed,
+  showUserSuccess,
+  updateUserFailed,
+  updateUserSuccess
 } from './user.action'
 import { USER_ACTION_TYPES } from './user.types'
-import { addUser, editUser, getUsers, showUser } from '../Actions/user'
-// import { getUsers } from '../Actions/user'
+import { addUser, deleteUser, editUser, getUsers, showUser } from '../Actions/user'
 
 export function * fetchUsersAsync (action) {
   try {
@@ -49,7 +56,22 @@ export function * showUserAsync (action) {
     const user = yield call(showUser, action.payload)
     yield put(showUserSuccess(user))
   } catch (error) {
-    yield put(updateUserFailed(error))
+    yield put(showUserFailed(error))
+  }
+}
+
+// const filteredNotes = notes.filter((note) => note._id !== id);
+//   return createAction(NOTE_ACTION_TYPE.REMOVE_NOTE_START, {
+//     notes: filteredNotes,
+//     id,
+//   });
+export function * deleteUserAsync ({ payload: { id, users, token } }) {
+  try {
+    const filteredUsers = users.filter((user) => user.custom_id !== id)
+    const deletedUser = yield call(deleteUser, { token, id })
+    yield put(deleteUserSuccess({ users: filteredUsers, user: deletedUser }))
+  } catch (error) {
+    yield put(deleteUserFailed(error))
   }
 }
 
@@ -73,6 +95,10 @@ export function * onShowUser () {
   yield takeLatest(USER_ACTION_TYPES.SHOW_USER_START, showUserAsync)
 }
 
+export function * onDeleteUser () {
+  yield takeLatest(USER_ACTION_TYPES.DELETE_USER_START, deleteUserAsync)
+}
+
 export function * userSagas () {
-  yield all([call(onFetchUsers), call(onChangeUserStatus), call(onAddUser), call(onUpdateUser), call(onShowUser)])
+  yield all([call(onFetchUsers), call(onChangeUserStatus), call(onAddUser), call(onUpdateUser), call(onShowUser), call(onDeleteUser)])
 }
