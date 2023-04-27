@@ -1,23 +1,22 @@
-import React from 'react'
-import ls from 'localstorage-slim'
+import React, { useEffect } from 'react'
 /* Components */
 import { Link } from 'react-router-dom'
 import defaultimage from '../../../assets/images/default.jpeg'
 import mail from '../../../assets/images/mail.svg'
 import phone from '../../../assets/images/phone.svg'
-// import { viewProfileAdmin } from '../../../Actions/auth'
-// import { useDispatch, useSelector } from 'react-redux'
+import { selectAuth, selectToken } from '../../../Store/auth/auth.selector'
+import { useDispatch, useSelector } from 'react-redux'
+import { getLoggedInDetailsStart } from '../../../Store/auth/auth.action'
 
 function AdminProfile () {
-  // const token = localStorage.getItem('token')
-  // const dispatch = useDispatch()
-  const profileData = ls.get(process.env.REACT_APP_AUTH_USER, {
-    decrypt: true,
-    secret: process.env.REACT_APP_LOCAL_STORAGE_ENCRYPT
-  })
-  // useEffect(() => {
-  //   dispatch(viewProfileAdmin(token))
-  // }, [])
+  const dispatch = useDispatch()
+
+  const profileData = useSelector(selectAuth)
+  const token = useSelector(selectToken)
+
+  useEffect(() => {
+    dispatch(getLoggedInDetailsStart(token))
+  }, [])
 
   return (
     <>
@@ -36,17 +35,17 @@ function AdminProfile () {
                       <div className="col-xl-8">
                         <div className="profileinfo profile-updated">
                           <div className="profile-img">
-                            <img src={profileData?.profile ? `${profileData?.profile}` : defaultimage} alt="ollato-img" />
+                            <img src={profileData?.profile ? `${profileData?.profile}` : defaultimage} alt="img" />
                           </div>
                           <div className="profiledesc">
                             <h4>{profileData?.full_name}</h4>
                             <ul className="iconbox">
                               <li>
-                                <img src={mail} alt="ollato-img" />
+                                <img src={mail} alt="img" />
                                 <p>{profileData?.email} </p>
                               </li>
                               <li>
-                                <img src={phone} alt="ollato-img" />
+                                <img src={phone} alt="img" />
                                 <p>{profileData?.contact_no} </p>
                               </li>
                             </ul>

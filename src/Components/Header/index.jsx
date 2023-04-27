@@ -2,15 +2,13 @@ import React from 'react'
 import { Form } from 'react-bootstrap'
 import { useNavigate } from 'react-router-dom'
 import notification from '../../assets/images/notification.svg'
-import ls from 'localstorage-slim'
 import defaultimage from '../../assets/images/default.jpeg'
 import PropTypes from 'prop-types'
+import { selectAuth } from '../../Store/auth/auth.selector'
+import { useSelector } from 'react-redux'
 
 function Header (props) {
-  const profiledata = ls.get(process.env.REACT_APP_AUTH_USER, {
-    decrypt: true,
-    secret: +process.env.REACT_APP_LOCAL_STORAGE_ENCRYPT
-  })
+  const profileData = useSelector(selectAuth)
   const navigate = useNavigate()
 
   const handleChange = (e) => {
@@ -49,14 +47,14 @@ function Header (props) {
           >
             <img
               src={
-                profiledata?.profile
-                  ? `${profiledata?.profile}`
+                profileData?.profile
+                  ? `${profileData?.profile}`
                   : defaultimage
               }
               alt=''
             />
               <h6>
-                {profiledata?.full_name}
+                {profileData?.full_name}
               </h6>
           </button>
         </div>

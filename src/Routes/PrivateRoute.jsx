@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom'
 import MainLayout from '../MainLayout/MainLayout'
 import { useSelector } from 'react-redux'
 import { selectToken } from '../Store/auth/auth.selector'
-// import ls from 'localstorage-slim'
 // import localStorage from 'react-secure-storage'
 
 function PrivateRoute ({ element: Component, slug }) {

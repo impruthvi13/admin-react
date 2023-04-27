@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { API_ADD_NEW_USER_ENDPOINT, API_LIST_USERS } from '../../constants/apiEndpoints'
+import { API_ADD_NEW_USER_ENDPOINT, API_DELETE_USER_ENDPOINT, API_LIST_USERS } from '../../constants/apiEndpoints'
 
 export async function addUser (userData) {
     const { data, token } = userData
@@ -21,5 +21,11 @@ export async function editUser (userData) {
 export async function showUser (userData) {
   const { token, id } = userData
   const response = await axios.get(`${API_ADD_NEW_USER_ENDPOINT}/${id}`, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` } })
+  return response.data
+}
+
+export async function deleteUser (userData) {
+  const { token, id } = userData
+  const response = await axios.delete(`${API_DELETE_USER_ENDPOINT}/${id}`, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` } })
   return response.data
 }

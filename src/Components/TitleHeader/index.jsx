@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Modal } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 // import { usedispatch } from 'react-redux'
 // import { deleteUniversity } from '../../Actions/Admin/university'
 
@@ -29,7 +29,6 @@ import { Link, useLocation } from 'react-router-dom'
 // import { deleteStudentCen } from '../../Actions/Center/student'
 // import { deleteCenter } from '../../Actions/Admin/center'
 // import { deleteCouncellor } from '../../Actions/Admin/counsellor'
-import ls from 'localstorage-slim'
 import DropDown from './DropDown'
 // import { deleteSoftwareMetrics } from '../../Actions/Admin/softwareMetrix'
 // import { deleteCoupon } from '../../Actions/Admin/coupenCode'
@@ -39,17 +38,17 @@ function TitleHeader (props) {
   // const // dispatch = use// dispatch()
   const location = useLocation()
   // const token = localStorage.getItem('token')
-  const roles = JSON.parse(localStorage.getItem('roles'))
-  const profile = JSON.parse(localStorage.getItem('profile'))
-  const adminType = ls.get('admin-type', { decrypt: true, secret: profile?.id })
+  // const roles = JSON.parse(localStorage.getItem('roles'))
+  // const profile = JSON.parse(localStorage.getItem('profile'))
+  // const adminType = ls.get('admin-type', { decrypt: true, secret: profile?.id })
 
   const [show, setShow] = useState(false)
   const handleClose = () => {
     setShow(false)
   }
-  const handleShow = () => {
-    setShow(true)
-  }
+  // const handleShow = () => {
+  //   setShow(true)
+  // }
   const handleDelete = () => {
     setShow(false)
     props.setRowArray([])
@@ -130,7 +129,7 @@ function TitleHeader (props) {
         </ul>
         {props?.showbuttons && (
           <div className='button-box'>
-            {adminType === 'super' ||
+            {/* {adminType === 'super' ||
             adminType === 'center' ||
             roles?.find((i) => i.module_permissions.slug === props?.slug)
               ?.delete === '1'
@@ -144,8 +143,8 @@ function TitleHeader (props) {
                 Delete Selected
               </button>
                 )
-              : null}
-            {adminType === 'super' ||
+              : null} */}
+            {/* {adminType === 'super' ||
             adminType === 'center' ||
             roles?.find((i) => i.module_permissions.slug === props?.slug)
               ?.create === '1'
@@ -157,7 +156,7 @@ function TitleHeader (props) {
                 Add New {props.name}
               </Link>
                 )
-              : null}
+              : null} */}
           </div>
         )}
         {location.pathname === '/center/purchase-license' && (
