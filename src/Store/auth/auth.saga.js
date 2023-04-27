@@ -13,7 +13,7 @@ import {
   logoutSuccess
 } from './auth.action'
 import { AUTH_ACTION_TYPES } from './auth.types'
-import { changeAdminPassword, editProfile, getLoginDetails, loginUser, logout } from '../Actions/auth'
+import { changeAdminPassword, editProfile, getLoginDetails, loginUser, logout } from './auth.api'
 
 export function * loginUsersAsync (action) {
   try {

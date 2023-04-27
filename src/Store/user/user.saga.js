@@ -13,7 +13,7 @@ import {
   updateUserSuccess
 } from './user.action'
 import { USER_ACTION_TYPES } from './user.types'
-import { addUser, deleteUser, editUser, getUsers, showUser } from '../Actions/user'
+import { addUser, deleteUser, editUser, getUsers, showUser } from './user.api'
 
 export function * fetchUsersAsync (action) {
   try {
