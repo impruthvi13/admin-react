@@ -17,7 +17,6 @@
     "env-cmd": "^10.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "i": "^0.3.7",
-    "localstorage-slim": "^2.3.0",
     "moment": "^2.29.4",
     "node-sass": "^7.0.1",
     "npm": "^8.10.0",

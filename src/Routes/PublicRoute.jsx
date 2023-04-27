@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types'
-// import ls from 'localstorage-slim'
 // import localStorage from 'react-secure-storage'
 
 function PublicRoute ({ element: Component }) {
