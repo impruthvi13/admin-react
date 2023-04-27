@@ -57,7 +57,7 @@ export default function GetAllUsers () {
 
   useEffect(() => {
     dispatch(fetchUserStart({ offset, limit, token }))
-  }, [offset, limit])
+  }, [])
 
   useEffect(() => {
     if (resMessage && resMessage !== null) {
