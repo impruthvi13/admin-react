@@ -20,7 +20,7 @@ import ActiveButton from '../../../Shared/Component/ActiveButton'
 /* Action File */
 import { useDispatch, useSelector } from 'react-redux'
 import { changeUserStatusStart, deleteUserStart, fetchUserStart, setUserResponseNull } from '../../../Store/user/user.action'
-import { selectAllUsers, selectUserIsLoading, selectUsersCount, selectUsersLimit, selectUsersOffset, selectUsersPageNo, selectUsersResMessage } from '../../../Store/user/user.selector'
+import { selectAllUsers, selectUserError, selectUserIsLoading, selectUsersCount, selectUsersLimit, selectUsersOffset, selectUsersPageNo, selectUsersResMessage } from '../../../Store/user/user.selector'
 import { selectToken } from '../../../Store/auth/auth.selector'
 
 export default function GetAllUsers () {
@@ -54,6 +54,7 @@ export default function GetAllUsers () {
   const limit = useSelector(selectUsersLimit)
   const pageNo = useSelector(selectUsersPageNo)
   const resMessage = useSelector(selectUsersResMessage)
+  const errorMessage = useSelector(selectUserError)
 
   useEffect(() => {
     dispatch(fetchUserStart({ offset, limit, token }))
@@ -70,6 +71,18 @@ export default function GetAllUsers () {
       dispatch(setUserResponseNull())
     }
   }, [resMessage])
+
+  useEffect(() => {
+    if (errorMessage && errorMessage !== null) {
+      enqueueSnackbar(resMessage, {
+        variant: 'error',
+        autoHide: true,
+        hide: 3000,
+        TransitionComponent: 'Fade'
+      })
+      dispatch(setUserResponseNull())
+    }
+  }, [errorMessage])
 
   const actionbutton = (row, cell) => {
     return <ActiveButton id={cell?.custom_id} handleShow={handleShow} slug='coupon-codes' viewlink='/admin/users' editlink='/admin/users/edit' />
