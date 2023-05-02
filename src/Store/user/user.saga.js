@@ -26,8 +26,11 @@ export function * fetchUsersAsync (action) {
 
 export function * changeUserStatusAsync (action) {
   try {
+    const index = action.payload.index
+    const usersArray = [...action.payload.users]
+    usersArray[index].active = action.payload?.data?.is_active
     const editedUser = yield call(editUser, action.payload)
-    yield put(fetchUserStatusSuccess(editedUser))
+    yield put(fetchUserStatusSuccess({ users: usersArray, editedUser, params: action.payload }))
   } catch (error) {
     yield put(fetchUserFailed(error))
   }

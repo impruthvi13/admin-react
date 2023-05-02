@@ -26,8 +26,6 @@ import { selectToken } from '../../../Store/auth/auth.selector'
 export default function GetAllUsers () {
   const { enqueueSnackbar } = useSnackbar()
 
-  const token = useSelector(selectToken)
-
   const dispatch = useDispatch()
 
   const location = useLocation()
@@ -45,20 +43,23 @@ export default function GetAllUsers () {
   // const [usersArray, setUsersArray] = useState([])
   // const [sort] = useState('title')
   // const [order] = useState('asc')
-  // const [search, setSearch] = useState('')
+  const [search, setSearch] = useState('')
 
   // useSelector
-  const users = useSelector(selectAllUsers)
   const usersCount = useSelector(selectUsersCount)
   const offset = useSelector(selectUsersOffset)
   const limit = useSelector(selectUsersLimit)
   const pageNo = useSelector(selectUsersPageNo)
   const resMessage = useSelector(selectUsersResMessage)
   const errorMessage = useSelector(selectUserError)
+  const isLoading = useSelector(selectUserIsLoading)
+  const token = useSelector(selectToken)
 
   useEffect(() => {
-    dispatch(fetchUserStart({ offset, limit, token }))
-  }, [])
+    dispatch(fetchUserStart({ offset, limit, token, search }))
+  }, [search])
+
+  const users = useSelector(selectAllUsers)
 
   useEffect(() => {
     if (resMessage && resMessage !== null) {
@@ -120,6 +121,8 @@ export default function GetAllUsers () {
     )
   }
 
+  // Search
+  const handleCallback = (search) => setSearch(search)
   // Function to handle switch of table
   const handleChange = (e, id, index) => {
     const data = {
@@ -128,24 +131,9 @@ export default function GetAllUsers () {
       action: 'change_status'
     }
 
-    const allUsers = [...users]
-    const statusUser = allUsers[index]
-    const obj = { ...statusUser, active: e.target.checked ? 'y' : 'n' }
-    allUsers[index] = obj
-    dispatch(changeUserStatusStart({ users: allUsers, data, token, id }))
+    dispatch(changeUserStatusStart({ index, data, token, id, users }))
   }
 
-  // Search
-  // const handleCallback = (childData) => {
-  //   setSearch(childData)
-  //   if (childData) {
-  //     dispatch(getAllCouponCodes(0, limit, sort, order, childData, token))
-  //   } else {
-  //     dispatch(getAllCouponCodes(0, limit, sort, order, '', token))
-  //   }
-  // }
-
-  // const users = userData?.data.data || []
   const columns = [
     {
       dataField: 'Sr.no',
@@ -245,61 +233,9 @@ export default function GetAllUsers () {
     }
   }
 
-  // Notification for Delete
-  // useEffect(() => {
-  //   if (previousProps?.isCouponDeleted !== isCouponDeleted) {
-  //     if (isCouponDeleted) {
-  //       setShow(false)
-  //       enqueueSnackbar(`${resMessage}`, {
-  //         variant: 'success',
-  //         hide: 2000,
-  //         autoHide: true
-  //       })
-  //       // dispatch(getAllCouponCodes(0, limit, sort, order, '', token))
-  //     } else if (isCouponDeleted === false) {
-  //       setShow(false)
-  //       enqueueSnackbar(`${resMessage}`, {
-  //         variant: 'error',
-  //         hide: 2000,
-  //         autoHide: true,
-  //         TransitionComponent: 'Fade'
-  //       })
-  //     }
-  //   }
-  //   // return () => {
-  //   //   previousProps.isCouponDeleted = isCouponDeleted
-  //   // }
-  // }, [isCouponDeleted])
-
-  // Notification for status
-  // useEffect(() => {
-  //   if (previousProps?.isCouponCodeEdited !== isCouponCodeEdited) {
-  //     if (isCouponCodeEdited) {
-  //       setShow(false)
-  //       enqueueSnackbar(`${resMessage}`, {
-  //         variant: 'success',
-  //         hide: 2000,
-  //         autoHide: true
-  //       })
-  //       // dispatch(getAllCouponCodes(0, limit, sort, order, '', token))
-  //     } else if (isCouponCodeEdited === false) {
-  //       setShow(false)
-  //       enqueueSnackbar(`${resMessage}`, {
-  //         variant: 'error',
-  //         hide: 2000,
-  //         autoHide: true,
-  //         TransitionComponent: 'Fade'
-  //       })
-  //     }
-  //   }
-  //   return () => {
-  //     previousProps.isCouponCodeEdited = isCouponCodeEdited
-  //   }
-  // }, [isCouponCodeEdited])
-
   return (
     <>
-      <Header name="Users List" searchbar={true} />
+      <Header name="Users List" searchbar={true} parentCallback={handleCallback}/>
       <TitleHeader
         name="Users"
         title="Users Management"
@@ -347,7 +283,7 @@ export default function GetAllUsers () {
             options={options}
             defaultSorted={defaultSortedBy}
             onTableChange={handleTablechange}
-            noDataIndication={ () => selectUserIsLoading ? <Spinner className='text-center' animation='border' /> : 'No data' }
+            noDataIndication={ () => isLoading ? <Spinner className='text-center' animation='border' /> : 'No data' }
           />
         </div>
       </div>

@@ -35,15 +35,16 @@ export const userReducer = (state = INITIAL_USER, action) => {
     case USER_ACTION_TYPES.CHANGE_USER_STATUS_START:
       return {
         ...state,
-        users: payload.users,
         isLoading: true
       }
-    case USER_ACTION_TYPES.CHANGE_USER_STATUS_SUCCESS:
+    case USER_ACTION_TYPES.CHANGE_USER_STATUS_SUCCESS:{
       return {
         ...state,
-        resMessage: payload?.meta?.message,
+        users: payload?.users,
+        resMessage: payload?.editedUser?.meta?.message,
         isLoading: false
       }
+    }
 
     case USER_ACTION_TYPES.CHANGE_USER_STATUS_FAILED:
       return { ...state, isLoading: false, error: payload?.response?.data?.meta?.message }

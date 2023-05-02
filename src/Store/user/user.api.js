@@ -7,8 +7,8 @@ export async function addUser (userData) {
     return response.data
   }
 export async function getUsers (userData) {
-    const { offset, limit, token } = userData
-    const response = await axios.get(API_LIST_USERS, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` }, params: { limit, offset } })
+    const { offset, limit, token, search } = userData
+    const response = await axios.get(API_LIST_USERS, { headers: { 'Content-Type': 'application/json', accept: 'application/json', Authorization: `Bearer ${token}` }, params: { limit, offset, search } })
     return response.data
 }
 
