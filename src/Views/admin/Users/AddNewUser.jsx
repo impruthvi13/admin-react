@@ -57,6 +57,9 @@ export default function AddNewUser () {
     if (userResponse && userResponse != null) {
       navigate('/admin/users')
     }
+  }, [userResponse])
+
+  useEffect(() => {
     if (userError && userError != null) {
       enqueueSnackbar(userError, {
         variant: 'error',
@@ -66,7 +69,7 @@ export default function AddNewUser () {
       })
       dispatch(setUserResponseNull())
     }
-  }, [userError, userResponse])
+  }, [userError])
   const handleShowHidePassword = () => {
     if (type === 'password') {
       setType('text')
