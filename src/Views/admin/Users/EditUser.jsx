@@ -11,6 +11,7 @@ import 'yup-phone'
 import { selectSingleUser, selectUserError, selectUsersResMessage } from '../../../Store/user/user.selector'
 import { setUserResponseNull, showUserStart, updateUserStart } from '../../../Store/user/user.action'
 import { selectToken } from '../../../Store/auth/auth.selector'
+import TitleHeader from '../../../Components/TitleHeader'
 
 export default function AddNewUser () {
   // const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
@@ -88,6 +89,7 @@ export default function AddNewUser () {
 return (
     <>
       <Header />
+      <TitleHeader name='Edit New User' title='Users Management' />
       <div className='main-layout'>
         <Form className='light-bg' onSubmit={handleSubmit(onSubmit)}>
           <div className='heading-box'>
@@ -117,7 +119,7 @@ return (
                   type='text'
                   name={name}
                   placeholder='Enter First Name'
-                  {...register('first_name', { first_name: 'asd' }, { required: true })}
+                  {...register('first_name', { required: true })}
                 />
                 {errors.first_name?.message && (
                   <Form.Text className='error-msg'>

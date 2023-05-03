@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 /* React Packages */
 import BootstrapTable from 'react-bootstrap-table-next'
 import paginationFactory from 'react-bootstrap-table2-paginator'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { Spinner } from 'react-bootstrap'
 import Select from 'react-select'
 import orderup from '../../../assets/images/order-up.svg'
@@ -104,9 +104,9 @@ export default function GetAllUsers () {
     let updatedList = [...rowArray]
 
     if (isSelect) {
-      updatedList = [...rowArray, row.id]
+      updatedList = [...rowArray, row.custom_id]
     } else {
-      updatedList.splice(rowArray.indexOf(row.id), 1)
+      updatedList.splice(rowArray.indexOf(row.custom_id), 1)
     }
     setRowArray(updatedList)
   }
@@ -196,12 +196,12 @@ export default function GetAllUsers () {
 
   // Pagination
   const onPageChange = (pageNo) => {
-    dispatch(fetchUserStart({ limit, offset: limit * (pageNo - 1), pageNo, token }))
+    dispatch(fetchUserStart({ limit, offset: limit * (pageNo - 1), pageNo, token, search }))
   }
 
   // pagePerLimit
   const handlePagePerLimit = (e) => {
-    dispatch(fetchUserStart({ limit: e.value, offset, pageNo, token }))
+    dispatch(fetchUserStart({ limit: e.value, offset, pageNo, token, search }))
   }
 
   const options = {
@@ -239,7 +239,7 @@ export default function GetAllUsers () {
       <TitleHeader
         name="Users"
         title="Users Management"
-        url="add-coupon-code"
+        url="add"
         setRowArray={setRowArray}
         rowArray={rowArray}
         location={location}
@@ -259,11 +259,6 @@ export default function GetAllUsers () {
                 onChange={e => handlePagePerLimit(e)}
               />
             </div>
-          </div>
-          <div className="col-md-6 text-end">
-              <Link to='add' className='theme-btn text-none'>
-                  Add User
-              </Link>
           </div>
         </div>
         <div className="col-md-12">

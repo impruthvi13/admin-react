@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addUserStart, setUserResponseNull } from '../../../Store/user/user.action'
 import { selectUserError, selectUsersResMessage } from '../../../Store/user/user.selector'
 import { selectToken } from '../../../Store/auth/auth.selector'
+import TitleHeader from '../../../Components/TitleHeader'
 
 export default function AddNewUser () {
   const token = useSelector(selectToken)
@@ -93,6 +94,7 @@ export default function AddNewUser () {
 return (
     <>
       <Header />
+      <TitleHeader name='Add New User' title='Users Management' />
       <div className='main-layout'>
         <Form className='light-bg' onSubmit={handleSubmit(onSubmit)}>
           <div className='heading-box'>
