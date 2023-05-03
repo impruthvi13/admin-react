@@ -22,6 +22,7 @@ import SignUp from '../Views/auth/SignUp'
 import AddNewUser from '../Views/admin/Users/AddNewUser'
 import GetAllUsers from '../Views/admin/Users/GetAllUsers'
 import EditUser from '../Views/admin/Users/EditUser'
+import GetAllCMS from '../Views/admin/CMS/GetAllCMS'
 
 function RoutesFile () {
   return (
@@ -61,6 +62,11 @@ function RoutesFile () {
           exact
           path='/admin/users'
           element={<PrivateRoute element={<GetAllUsers />} />}
+        />
+        <Route
+          exact
+          path='/admin/cms'
+          element={<PrivateRoute element={<GetAllCMS />} />}
         />
         <Route
           exact

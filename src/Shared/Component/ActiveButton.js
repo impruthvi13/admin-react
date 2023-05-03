@@ -22,6 +22,16 @@ function ActiveButton ({ id, handleShow, slug, viewlink, editlink }) {
     </div>
   }
 
+  if (location.pathname === '/admin/cms') {
+    return <div className="button-box">
+      <Link to={`${editlink}/${id}`}>
+        <button className="action-btns light-blue-bg" type="button">
+          <img src={edit} alt="" /> Edit
+        </button>
+      </Link>
+    </div>
+  }
+
   return <div className="button-box">
     <Link to={`${viewlink}/${id}`}>
       <button className="action-btns green-bg" type="button">

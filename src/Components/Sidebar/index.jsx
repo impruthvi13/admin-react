@@ -71,6 +71,18 @@ function Sidebar (props) {
                   <span> User </span>
                 </NavLink>
               </li>
+
+              <li>
+                <NavLink
+                  to='/admin/cms'
+                  className='menu-link'
+                >
+                  <div className='icon-box'>
+                    <img src={dashboard} alt='logo sidebar' />
+                  </div>
+                  <span> CMS </span>
+                </NavLink>
+              </li>
               <li>
                 <NavLink
                   to='/admin/settings/myprofile'
