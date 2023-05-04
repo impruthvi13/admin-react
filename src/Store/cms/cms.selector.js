@@ -6,3 +6,4 @@ export const selectCMSPageNo = (state) => +state.cms.pageNo
 export const selectCMSResMessage = (state) => state.cms.resMessage
 export const selectCMSIsLoading = (state) => state.cms.isLoading
 export const selectCMSError = (state) => state.cms.error
+export const selectSingleCMS = (state) => state.cms.oneCMS

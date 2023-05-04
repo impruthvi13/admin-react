@@ -11,7 +11,8 @@ const INITIAL_CMS = {
   pageNo: 1,
   isLoading: false,
   resMessage: null,
-  error: null
+  error: null,
+  oneCMS: null
 }
 
 export const cmsReducer = (state = INITIAL_CMS, action) => {
@@ -31,6 +32,18 @@ export const cmsReducer = (state = INITIAL_CMS, action) => {
         pageNo: payload && payload.params.pageNo ? payload.params.pageNo : state.pageNo,
         isLoading: false
       }
+
+      case CMS_ACTION_TYPES.SHOW_CMS_START:
+        return { ...state, isLoading: true }
+      case CMS_ACTION_TYPES.SHOW_CMS_SUCCESS:
+          return {
+            ...state,
+            isLoading: false,
+            oneCMS: payload.data
+          }
+      case CMS_ACTION_TYPES.SHOW_CMS_FAILED:
+        return { ...state, isLoading: false, error: payload?.response?.data?.meta?.message }
+
       case CMS_ACTION_TYPES.SET_CMS_RESPONSE_NULL:
         return { ...state, resMessage: null, error: null }
 
