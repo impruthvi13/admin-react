@@ -95,7 +95,7 @@ export const authReducer = (state = INITIAL_AUTH, action) => {
         }
       case AUTH_ACTION_TYPES.LOGOUT_START:
         return {
-          ...state,
+          INITIAL_AUTH,
           isLoading: true
         }
       case AUTH_ACTION_TYPES.LOGOUT_SUCCESS:
